@@ -48,7 +48,6 @@ private:
     bool _activated;
 
     const static int64_t validAmount = 1e6;
-    static int constructedAccounts;
 
     Account();
     void reset();

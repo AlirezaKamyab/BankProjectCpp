@@ -1,8 +1,6 @@
 #include "../Headers/account.h"
 #include <sstream>
 
-int Account::constructedAccounts = 0;
-
 Account::Account() : _accountNumber{""}, _ownersId{""}, _balance{0}, _activated{false}, _validationCount{0}, _creationDate{1,1,1390} {}
 
 Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate) : Account{accountNumber,
