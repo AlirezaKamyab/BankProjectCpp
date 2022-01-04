@@ -16,7 +16,7 @@ Account::Account(const string& accountNumber, const string& ownersId, const Date
 Account::Account(const Account& other) : Account{other._accountNumber, other._ownersId, other._creationDate, other._balance,
     other._validationCount, other._activated} {}
 
-Account::Account(Account&& other) : Account{other} { other.reset(); }
+Account::Account(Account&& other) noexcept : Account{other} { other.reset(); }
 
 Account::~Account() { reset(); }
 
