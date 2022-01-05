@@ -2,7 +2,7 @@
 #include <sstream>
 
 Employee::Employee() : Person{"", "", "", Date{1,1,1390}}, User{"Anonymouse", "Anonymouse"}, 
-    _vacationHours{0}, _extraHours{0}, _baseIncome{0}, _personnelId{0} {}
+    _vacationHours{0}, _extraHours{0}, _baseIncome{0}, _personnelId{0}, _employeeType{EmployeeType::EMPLOYEE} {}
 
 Employee::Employee(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& bdate,
     const string& username, const string& password) : Employee{name, lastname, id, personnelId, bdate, username, password,
@@ -11,7 +11,7 @@ Employee::Employee(const string& name, const string& lastname, const string& id,
 Employee::Employee(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& bdate,
     const string& username, const string& password, const int64_t& baseIncome, const int& vacationHours, const int& extraHours,
     Bank* bank) : Person{name, lastname, id, bdate}, User{username, password}, _baseIncome{baseIncome}, _extraHours{extraHours},
-    _vacationHours{vacationHours}, _personnelId{personnelId}, _bank{bank} {
+    _vacationHours{vacationHours}, _personnelId{personnelId}, _bank{bank}, _employeeType{EmployeeType::EMPLOYEE} {
         if(_personnelId < 100 || _personnelId > 999) throw EmployeeException{"Invalid personnel id!"};
         if(_vacationHours < 0 || _extraHours < 0 || _baseIncome < 0) throw EmployeeException{"Some arguments were supposed to be non-negative; negative value was given!"};
     }
@@ -46,6 +46,7 @@ int64_t Employee::getReward() const { return _reward; }
 int64_t Employee::getPenalty() const { return _penalty; }
 int Employee::getExtraHours() const { return _extraHours; }
 int Employee::getVacationHours() const { return _vacationHours; }
+EmployeeType Employee::getEmployeeType() const { return _employeeType; }
 
 void Employee::setBaseIncome(const int64_t& baseIncome) {
     if(baseIncome < 0) throw EmployeeException{"Invalid base income! Base income cannot be less than zero!"};
@@ -107,6 +108,23 @@ Employee& Employee::operator=(const Employee& rhs) {
 Employee::operator std::string() const {
     stringstream str;
     str << Person::operator std::string() << endl;
+
+    switch (_employeeType)
+    {
+    case EmployeeType::EMPLOYEE:
+        str << "Type: Employee" << endl;
+        break;
+    case EmployeeType::FACILITIES:
+        str << "Type: Facilities" << endl;
+        break;
+    case EmployeeType::MANAGER:
+        str << "Type: Manager" << endl;
+        break;
+    default:
+        str << "Type: Unknown" << endl;
+        break;
+    }
+
     str << "Personnel ID: " << _personnelId << endl;
     str << "Base Income: " << _baseIncome << endl;
     str << "Income: " << getIncome() << endl;

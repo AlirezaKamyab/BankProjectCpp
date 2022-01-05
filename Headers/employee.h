@@ -9,6 +9,7 @@ using namespace std;
 
 class Bank;
 class Account;
+enum class EmployeeType {EMPLOYEE, FACILITIES, MANAGER};
 
 class EmployeeException : public exception {
 public:
@@ -39,6 +40,7 @@ public:
     int64_t getReward() const;
     int getVacationHours() const;
     int getExtraHours() const;
+    EmployeeType getEmployeeType() const;
 
     void setBaseIncome(const int64_t&);
     void setPenalty(const int64_t&);
@@ -63,6 +65,7 @@ protected:
     int64_t _reward = 0;
     int _vacationHours;
     int _extraHours;
+    EmployeeType _employeeType;
     Bank* _bank;
 
     static const int maxLeaveHours = 15;
