@@ -1,6 +1,12 @@
 #include "../Headers/facilities.h"
+#include "../Headers/bank.h"
+#include "../Headers/account.h"
+#include "../Headers/request.h"
+#include <sstream>
+#include <iomanip>
 
-vector<Client*> Facilities::requests{};
+vector<Request> Facilities::requests{};
+int Facilities::lastSerialGenerated = 0;
 
 Facilities::Facilities() : Employee{"", "", "", 0, Date{1, 1, 1390}, "", "", 0, 0, 0, nullptr} {}
 
@@ -21,23 +27,32 @@ void Facilities::reset() {
     Employee::reset();
 }
 
-void Facilities::addLoanRequest(Client* client) {
-    for(Client* ptr : requests) {
-        if(ptr == client) throw FacilitiesException{"Your previous request is still pending! request to remove it."};
-    }
-
-    requests.push_back(client);
+void Facilities::addLoanRequest(const Request& request) {
+    requests.push_back(request);
 }
 
-void Facilities::removeLoanRequest(Client* client) {
+void Facilities::acceptARequest() {
     for(int i = 0; i < requests.size(); i++) {
-        if(requests[i] == client) {
-            requests.erase(requests.begin() + i);
-            return;
-        }
+        Account* temp = requests[i].getAccount();
+        if(temp->getStatus() == false) continue;
+        if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) continue;
+        int64_t newAmount = temp->getValidationCount() * temp->getBalance();
+        stringstream serial;
+        serial << setw(8) << lastSerialGenerated++;
+        Date loanCreationDate{1,1,1390}; // this should be changed
+        Loan* loan = new Loan{serial.str(), temp, loanCreationDate, newAmount, requests[i].getType()};
+        requests.erase(requests.begin() + i);
+        return;
     }
+}
 
-    throw FacilitiesException{"No request found from the specified client!"};
+void Facilities::disableAccounts(Client* client) const {
+    for(Account* account : client->_accounts) account->changeStatus(false);
+}
+
+string Facilities::loanInfo(const string& serialNumber) const {
+    const Loan* loan = _bank->searchLoans(serialNumber);
+    return loan->operator std::string();
 }
 
 Facilities& Facilities::operator=(const Facilities& rhs) {

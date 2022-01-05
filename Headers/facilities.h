@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "employee.h"
+#include "request.h"
 using namespace std;
 
 class FacilitiesException : public EmployeeException {
@@ -22,16 +23,16 @@ public:
     Facilities(Facilities&&) noexcept;
     virtual ~Facilities();
 
-    static void addLoanRequest(Client*);
-    static void removeLoanRequest(Client*);
-    string loanStatus() const; // should be implemented
-    void acceptARequest(); // should be implemented
-    void disableAccounts(Client*) const; // should be implemented
-    string loanInfo(const string&) const; // should be implemented
+    static void addLoanRequest(const Request&);
+    string loanStatus() const; // should be implemented! what is this? why did I define this?
+    void acceptARequest(); // date of creation loan should be changed
+    void disableAccounts(Client*) const;
+    string loanInfo(const string&) const;
 
     Facilities& operator=(const Facilities&);
 private:
-    static vector<Client*> requests;
+    static vector<Request> requests;
+    static int lastSerialGenerated;
     Facilities();
     void reset();
     bool _acceptedARequest;
