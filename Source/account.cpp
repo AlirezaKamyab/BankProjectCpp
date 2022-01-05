@@ -1,20 +1,21 @@
 #include "../Headers/account.h"
 #include <sstream>
 
-Account::Account() : _accountNumber{""}, _ownersId{""}, _balance{0}, _activated{false}, _validationCount{0}, _creationDate{1,1,1390} {}
+Account::Account() : _accountNumber{""}, _ownersId{""}, _balance{0}, _activated{false}, _validationCount{0}, _creationDate{1,1,1390}, 
+    _bank{nullptr} {}
 
-Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate) : Account{accountNumber,
-    ownersId, creationDate, 0, 0, true} {}
+Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate, Bank* bank) : Account{accountNumber,
+    ownersId, creationDate, 0, 0, true, bank} {}
 
 Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate, const int64_t& balance,
-    const int& validationCount, const bool& status) : _accountNumber{accountNumber}, _ownersId{ownersId}, _activated{status}, 
-    _creationDate{creationDate} { 
+    const int& validationCount, const bool& status, Bank* bank) : _accountNumber{accountNumber}, _ownersId{ownersId}, _activated{status}, 
+    _creationDate{creationDate}, _bank{bank} { 
         setBalance(balance);
         setValidationCount(validationCount);
     }
 
 Account::Account(const Account& other) : Account{other._accountNumber, other._ownersId, other._creationDate, other._balance,
-    other._validationCount, other._activated} {}
+    other._validationCount, other._activated, other._bank} {}
 
 Account::Account(Account&& other) noexcept : Account{other} { other.reset(); }
 
@@ -26,6 +27,7 @@ void Account::reset() {
     _balance = 0;
     _activated = false;
     _validationCount = 0;
+    _bank = nullptr;
     _creationDate = Date{1, 1, 1390};
 }
 
@@ -45,6 +47,7 @@ string Account::getOwnersId() const { return _ownersId; }
 int64_t Account::getBalance() const { return _balance; }
 int Account::getValidationCount() const { return _validationCount; }
 bool Account::getStatus() const { return _activated; }
+Bank* Account::getBank() const { return _bank; }
 
 Account& Account::operator=(const Account& rhs) {
     if(&rhs == this) return *this;
@@ -54,6 +57,7 @@ Account& Account::operator=(const Account& rhs) {
     _activated = rhs._activated;
     _validationCount = rhs._validationCount;
     _creationDate = rhs._creationDate;
+    _bank = rhs._bank;
     return *this;
 }
 

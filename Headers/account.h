@@ -17,11 +17,13 @@ private:
     string message;
 };
 
+class Bank;
+
 class Account {
 public:
-    Account(const string&, const string&, const Date&);
-    Account(const string&, const string&, const Date&, const int64_t&);
-    Account(const string&, const string&, const Date&, const int64_t&, const int&, const bool&);
+    Account(const string&, const string&, const Date&, Bank*);
+    Account(const string&, const string&, const Date&, const int64_t&, Bank*);
+    Account(const string&, const string&, const Date&, const int64_t&, const int&, const bool&, Bank*);
     Account(const Account&);
     Account(Account&&) noexcept;
     ~Account();
@@ -35,6 +37,7 @@ public:
     bool getStatus() const;
     int64_t getBalance() const;
     int getValidationCount() const;
+    Bank* getBank() const { return _bank; }
 
     Account& operator=(const Account&);
     operator string() const;
@@ -46,6 +49,7 @@ private:
     int64_t _balance;
     int _validationCount;
     bool _activated;
+    Bank* _bank;
 
     const static int64_t validAmount = 1e6;
 
