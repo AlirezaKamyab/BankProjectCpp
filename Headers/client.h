@@ -3,11 +3,12 @@
 
 #include "user.h"
 #include "person.h"
+#include "loan.h"
 #include <vector>
 using namespace std;
 
 class Account;
-
+class Facilities;
 class Client : public Person, public User {
 public:
     Client(const string&, const string&, const string&, const Date&, const string&, const string&);
@@ -17,13 +18,14 @@ public:
     ~Client();
 
     void createAccount(Account&);
-    Account* getAccount(const string&) const; // should be implemented
-    void deposit(const string&, const int64_t&) const; // should be implemented
-    void withdraw(const string&, const int64_t&) const; // should be implemented
-    void requestLoan(const string&); // should be implemented
+    Account* getAccount(const string&) const;
+    void deposit(const string&, const int64_t&) const;
+    void withdraw(const string&, const int64_t&) const;
+    void requestLoan(const string&, const LoanType&); // should be implemented
 
     Client& operator=(const Client&);
-    operator string() const; // should be modified?
+    operator string() const;
+    friend class Facilities;
 private:
     vector<Account*> _accounts;
     

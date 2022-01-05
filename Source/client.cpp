@@ -1,4 +1,8 @@
 #include "../Headers/client.h"
+#include "../Headers/account.h"
+#include "../Headers/bank.h"
+#include "../Headers/facilities.h"
+#include "../Headers/request.h"
 #include <sstream>
 
 Client::Client() : Person{"", "", "", Date{}}, User{"Anonymouse", "Anonymouse"} {}
@@ -29,6 +33,40 @@ void Client::createAccount(Account& account) {
     _accounts.push_back(&account);
 }
 
+Account* Client::getAccount(const string& accountNumber) const {
+    for(Account* account : _accounts) {
+        if(account->getAccountNumber() == accountNumber) return account;
+    }
+
+    return nullptr;
+}
+
+void Client::deposit(const string& accountNumber, const int64_t& amount) const {
+    if(amount < 0) throw AccountException{"Cannot deposit a negative"};
+    Account* temp = getAccount(accountNumber);
+    if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
+    temp->setBalance(temp->getBalance() + amount);
+}
+
+void Client::withdraw(const string& accountNumber, const int64_t& amount) const {
+    if(amount < 0) throw AccountException{"Cannot withdraw a negative"};
+    Account* temp = getAccount(accountNumber);
+    if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
+    if(temp->getStatus() == false) throw AccountException{"Account is de-activated!"};
+    if(temp->getBalance() < amount) throw AccountException{"Insufficient balance!"};
+    temp->setBalance(temp->getBalance() - amount);
+}
+
+void Client::requestLoan(const string& accountNumber, const LoanType& type) {
+    Account* temp = getAccount(accountNumber);
+    if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
+    if(temp->getStatus() == false) throw AccountException{"Account is de-activated!"};
+
+    Request req{this, temp, type};
+
+    Facilities::addLoanRequest(req);
+}
+
 Client& Client::operator=(const Client& rhs) {
     if(&rhs == this) return *this;
     User::operator=(rhs);
@@ -42,7 +80,9 @@ Client::operator std::string() const {
     str << Person::operator std::string() << endl;
     str << User::operator std::string() << endl;
 
-    // print accounts too?
+    str << "----------------------" << endl;
+    str << "Accounts" << endl;
+    for(Account* account : _accounts) str << account->operator std::string() << endl;
 
     return str.str();
 }
