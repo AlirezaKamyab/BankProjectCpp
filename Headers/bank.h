@@ -10,6 +10,7 @@ class Employee;
 class Facilities;
 class Manager;
 class Loan;
+class Account;
 
 class BankException : public exception {
 public:
@@ -34,6 +35,7 @@ public:
     const Client* searchClient(const string&) const;
     const Employee* searchEmployee(const int&) const;
     const Loan* searchLoans(const string&) const;
+    const vector<const Loan*> getClientLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;
 
@@ -56,6 +58,8 @@ private:
     Client* _searchClient(const string&) const;
     Employee* _searchEmployee(const int&) const;
     Loan* _searchLoans(const string&) const;
+    Account* _searchAccount(const string&) const;
+    Client* _ownerOfTheAccount(const string&) const;
 };
 
 #endif // BANK_H

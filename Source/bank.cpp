@@ -65,11 +65,39 @@ Loan* Bank::_searchLoans(const string& serialNumber) const {
     return nullptr;
 }
 
+Account* Bank::_searchAccount(const string& accountNumber) const {
+    for(Client* client : _clients) {
+        for(Account* account : client->_accounts) {
+            if(account->getAccountNumber() == accountNumber) return account;
+        }
+    }
+    return nullptr;
+}
+
+Client* Bank::_ownerOfTheAccount(const string& accountNumber) const {
+    for(Client* client : _clients) {
+        for(Account* account : client->_accounts) {
+            if(account->getAccountNumber() == accountNumber) return client;
+        }
+    }
+    return nullptr;
+}
+
 const Client* Bank::searchClient(const string& id) const { return _searchClient(id); }
 const Employee* Bank::searchEmployee(const int& personnelId) const { return _searchEmployee(personnelId); }
 const Loan* Bank::searchLoans(const string& serialNumber) const { return _searchLoans(serialNumber); }
 const Manager* Bank::getManager() const { return _manager; }
 const Facilities* Bank::getFacility() const { return _facilities; }
+const vector<const Loan*> Bank::getClientLoans(const string& id) const {
+    Client* client = _searchClient(id);
+    if(client == nullptr) throw BankException{"Bank could not find the client!"};
+    vector<const Loan*> temp;
+    for(Loan* loan : _loans) {
+        if(client->getAccount(loan->getLinkedAccountNumber()) != nullptr) temp.push_back(loan);
+    }
+
+    return temp;
+}
 
 Bank& Bank::operator=(const Bank& rhs) {
     if(&rhs == this) return *this;
