@@ -4,6 +4,7 @@
 #include "loan.h"
 #include "client.h"
 #include "account.h"
+#include <string>
 using namespace std;
 
 class Request{
@@ -18,6 +19,7 @@ public:
     Account* getAccount() const;
 
     Request& operator=(const Request&);
+    operator std::string() const;
 private:
     LoanType _type;
     Client* _client;

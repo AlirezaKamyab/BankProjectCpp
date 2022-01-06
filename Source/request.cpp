@@ -1,4 +1,5 @@
 #include "../Headers/request.h"
+#include <sstream>
 
 Request::Request() : Request{nullptr, nullptr, LoanType::MONTH_24} {}
 Request::Request(Client* client, Account* account, const LoanType& loanType) : _client{client}, _account{account}, _type{loanType} {}
@@ -22,4 +23,24 @@ Request& Request::operator=(const Request& rhs) {
     _account = rhs._account;
     _type = rhs._type;
     return *this;
+}
+
+Request::operator std::string() const {
+    stringstream str;
+    str << _account->operator std::string() << endl;
+    
+    switch (_type)
+    {
+    case LoanType::MONTH_12:
+        str << "12_Month, " << (int)_type << "%" << endl;
+        break;
+    case LoanType::MONTH_24:
+        str << "24_Month, " << (int)_type << "%" << endl;
+        break;
+    case LoanType::MONTH_36:
+        str << "36_Month, " << (int)_type << "%" << endl;
+        break;
+    }
+
+    return str.str();
 }
