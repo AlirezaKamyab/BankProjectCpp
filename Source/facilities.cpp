@@ -42,6 +42,7 @@ void Facilities::acceptARequest() {
         Date loanCreationDate{1,1,1390}; // this should be changed
         Loan* loan = new Loan{serial.str(), temp, loanCreationDate, newAmount, requests[i].getType()};
         requests.erase(requests.begin() + i);
+        _bank->_loans.push_back(loan);
         return;
     }
 }
