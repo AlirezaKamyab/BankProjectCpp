@@ -1,4 +1,6 @@
 #include "../Headers/employee.h"
+#include "../Headers/bank.h"
+#include "../Headers/account.h"
 #include <sstream>
 
 Employee::Employee() : Person{"", "", "", Date{1,1,1390}}, User{"Anonymouse", "Anonymouse"}, 
@@ -92,6 +94,56 @@ void Employee::requestExtraHours(const int& hours) {
     _reward = Employee::extraReward * _extraHours;
 } 
 
+Client* Employee::searchClient(const string& id) const {
+    return _bank->_searchClient(id);
+}
+
+void Employee::enableAccount(const string& accountNumber) const {
+    Account* account = _bank->_searchAccount(accountNumber);
+    if(account == nullptr) throw EmployeeException{"Cannot find the specified account in the bank!"};
+    account->changeStatus(true);
+}
+
+void Employee::disableAccount(const string& accountNumber) const {
+    Account* account = _bank->_searchAccount(accountNumber);
+    if(account == nullptr) throw EmployeeException{"Cannot find the specified account in the bank!"};
+    account->changeStatus(false);
+}
+
+void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
+    if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
+    Account* account = new Account{"Random Number", client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
+    // while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account.setAccountNumber("Another Random");
+    client->createAccount(*account);
+}
+
+void Employee::deleteAccount(const string& accountNumber) const {
+    Client* owner = _bank->_ownerOfTheAccount(accountNumber);
+    if(owner == nullptr) throw EmployeeException{"Cound't find the specified account in the bank!"};
+    for(int i = 0; i < owner->_accounts.size(); i++) {
+        if(owner->_accounts[i]->getAccountNumber() == accountNumber) {
+            owner->_accounts.erase(owner->_accounts.begin() + i);
+            break;
+        }
+    }
+
+    if(owner->_accounts.size() == 0) {
+        for(int i = 0; i < _bank->_clients.size(); i++) {
+            if(_bank->_clients[i]->getId() == owner->getId()) {
+                _bank->_clients.erase(_bank->_clients.erase(_bank->_clients.begin() + i));
+                break;
+            }
+        }
+    }
+
+    return;
+}
+
+string Employee::showClientInfo(const string& id) const {
+    Client* client = searchClient(id);
+    if(client == nullptr) return "Not found!";
+    return (string) *client;
+}
 
 Employee& Employee::operator=(const Employee& rhs) {
     if(&rhs == this) return *this;

@@ -51,10 +51,12 @@ public:
 
     void takeHoursOff(const int&);
     void requestExtraHours(const int&);
-    Client& searchClient(const string& id); // should be implemented
-    void EnableAccount(Account&) const; // should be implemented
-    void DisableAccount(Account&) const; // should be implemented
-    void CreateAccount(Client&) const; // should be implemented
+    Client* searchClient(const string& id) const;
+    void enableAccount(const string&) const;
+    void disableAccount(const string&) const; 
+    void createAccount(Client*, const int64_t&) const; // should be modified (important)
+    void deleteAccount(const string&) const;
+    string showClientInfo(const string&) const;
 
     Employee& operator=(const Employee&);
     operator std::string() const;
