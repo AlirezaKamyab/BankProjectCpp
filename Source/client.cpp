@@ -8,14 +8,14 @@
 Client::Client() : Person{"", "", "", Date{}}, User{"Anonymouse", "Anonymouse"} {}
 
 Client::Client(const string& name, const string& lastname, const string& id, const Date& bdate,
-        const string& username, const string& password) : Person{name, lastname, id, bdate}, User{username, password} {}
+        const string& username, const string& password) : Person{name, lastname, id, bdate}, User{username, password}, _bank{nullptr} {}
 
 Client::Client(const string& name, const string& lastname, const string& id, const Date& bdate,
         const string& username, const string& password, const vector<Account*>& accounts) : 
-        Person{name, lastname, id, bdate}, User{username, password}, _accounts{accounts} {}
+        Person{name, lastname, id, bdate}, User{username, password}, _accounts{accounts}, _bank{nullptr} {}
 
 Client::Client(const Client& other) : Person{other._name, other._lastname, other._id, other._birthday},
-        User{other._username, other._password}, _accounts{other._accounts} {}
+        User{other._username, other._password}, _accounts{other._accounts}, _bank{other._bank} {}
 
 Client::Client(Client&& other) noexcept : Client{other} {
     other.reset();
@@ -27,6 +27,7 @@ void Client::reset() {
     User::reset();
     Person::reset();
     _accounts = vector<Account*>();
+    _bank = nullptr;
 }
 
 void Client::createAccount(Account& account) {
@@ -39,6 +40,13 @@ Account* Client::getAccount(const string& accountNumber) const {
     }
 
     return nullptr;
+}
+
+Bank* Client::getBank(void) const { return _bank; }
+
+void Client::setBank(Bank* bank) { 
+    if(_bank == nullptr) throw ClientException{"Bank cannot be set to nullptr!"};
+    _bank = bank; 
 }
 
 void Client::deposit(const string& accountNumber, const int64_t& amount) const {
@@ -65,6 +73,16 @@ void Client::requestLoan(const string& accountNumber, const LoanType& type) {
     Request req{this, temp, type};
 
     Facilities::addLoanRequest(req);
+}
+
+string Client::showLoans() const {
+    stringstream str;
+
+    if(_bank == nullptr) throw ClientException{"Bank for this client is not specified!"};
+    vector<const Loan*> loans = _bank->getClientLoans(this->getId());
+    for(const Loan* loan : loans) str << (string) *loan << "\n" << endl;
+
+    return str.str();
 }
 
 Client& Client::operator=(const Client& rhs) {
