@@ -2,6 +2,7 @@
 #define BANK_H
 
 #include <vector>
+#include <string>
 using namespace std;
 
 class Client;
@@ -38,7 +39,7 @@ public:
 
     Bank& operator=(const Bank& other);
     friend class Employee;
-    friend class Facility;
+    friend class Facilities;
     friend class Manager;
     friend class Account;
 private:
