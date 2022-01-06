@@ -7,6 +7,7 @@
 
 vector<Request> Facilities::requests{};
 int Facilities::lastSerialGenerated = 0;
+bool Facilities::_acceptedOneRequest = false;
 
 Facilities::Facilities() : Employee{"", "", "", 0, Date{1, 1, 1390}, "", "", 0, 0, 0, nullptr} {}
 
@@ -17,7 +18,7 @@ Facilities::Facilities(const string& name, const string& lastname, const string&
 Facilities::Facilities(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& birthday,
     const string& username, const string& password, const int64_t& baseIncome, const int& vacationHours, const int& extraHours,
     Bank* bank) : Employee{name, lastname, id, personnelId, birthday, username, password, baseIncome, vacationHours, extraHours,
-    bank}, _acceptedARequest{false} {}
+    bank} {}
 
 Facilities::Facilities(const Facilities& other) : Employee{other} {}
 Facilities::Facilities(Facilities&& other) noexcept : Facilities{other} { other.reset(); }
@@ -32,6 +33,7 @@ void Facilities::addLoanRequest(const Request& request) {
 }
 
 void Facilities::acceptARequest() {
+    if(_acceptedOneRequest) throw EmployeeException{"One request has been accepted for today"};
     for(int i = 0; i < requests.size(); i++) {
         Account* temp = requests[i].getAccount();
         if(temp->getStatus() == false) continue;
@@ -49,6 +51,18 @@ void Facilities::acceptARequest() {
 
 void Facilities::disableAccounts(Client* client) const {
     for(Account* account : client->_accounts) account->changeStatus(false);
+}
+
+void Facilities::disableAccounts(const string& id) const {
+    Client* client = searchClient(id);
+    if(client == nullptr) throw BankException{"Couldn't find the specified client inside the bank!"};
+    for(Account* account : client->_accounts) account->changeStatus(false);
+}
+
+string Facilities::showAllrequests() const {
+    stringstream str;
+    for(Request req : requests) str << req.operator std::string() << "\n" << endl;
+    return str.str();
 }
 
 string Facilities::loanInfo(const string& serialNumber) const {

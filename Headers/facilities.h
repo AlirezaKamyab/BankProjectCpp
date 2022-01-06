@@ -24,18 +24,19 @@ public:
     virtual ~Facilities();
 
     static void addLoanRequest(const Request&);
-    string loanStatus() const; // should be implemented! what is this? why did I define this?
     void acceptARequest(); // date of creation loan should be changed
     void disableAccounts(Client*) const;
+    void disableAccounts(const string&) const;
+    string showAllrequests() const;
     string loanInfo(const string&) const;
 
     Facilities& operator=(const Facilities&);
 private:
-    static vector<Request> requests;
-    static int lastSerialGenerated;
-    Facilities();
     void reset();
-    bool _acceptedARequest;
+    Facilities();
+    static int lastSerialGenerated;
+    static vector<Request> requests;
+    static bool _acceptedOneRequest;
 };
 
 #endif // FACILITIES_H
