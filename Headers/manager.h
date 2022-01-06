@@ -1,7 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "employee.h"
+#include "facilities.h"
 #include "exception"
 using namespace std;
 
@@ -26,14 +26,15 @@ public:
     Manager(Manager&&) noexcept;
     virtual ~Manager();
 
-    string employeeInfo(const int&) const; // should be implemented
-    void hireEmployee(Employee*) const; // should be implemented
-    void fireEmployee(const int&) const; // should be implemented
+    string employeeInfo(const int&) const;
+    void hireEmployee(Employee*) const;
+    void fireEmployee(const int&) const;
 
     Manager& operator=(const Manager&);
 private:
     Manager();
     void reset();
+    static int uniqueNumber;
 };
 
 #endif // MANAGER_H
