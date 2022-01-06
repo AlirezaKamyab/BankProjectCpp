@@ -37,7 +37,7 @@ public:
     bool getStatus() const;
     int64_t getBalance() const;
     int getValidationCount() const;
-    Bank* getBank() const { return _bank; }
+    Bank* getBank() const;
 
     Account& operator=(const Account&);
     operator string() const;
