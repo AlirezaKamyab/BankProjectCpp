@@ -39,6 +39,7 @@ public:
     void deposit(const string&, const int64_t&) const;
     void withdraw(const string&, const int64_t&) const;
     void requestLoan(const string&, const LoanType&);
+    Loan* searchLoan(const string&) const;
     string showLoans() const;
 
     Client& operator=(const Client&);

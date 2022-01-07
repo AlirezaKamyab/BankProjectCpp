@@ -79,10 +79,20 @@ string Client::showLoans() const {
     stringstream str;
 
     if(_bank == nullptr) throw ClientException{"Bank for this client is not specified!"};
-    vector<const Loan*> loans = _bank->getClientLoans(this->getId());
-    for(const Loan* loan : loans) str << (string) *loan << "\n" << endl;
+    for(Account* account : _accounts) {
+        if(account->getLoan() == nullptr) continue;
+        str << (string) *account->getLoan() << "\n" << endl;
+    }
 
     return str.str();
+}
+
+Loan* Client::searchLoan(const string& serial) const {
+    for(Account* account : _accounts) {
+        if(account->getLoan()->getSerialNumber() == serial) return account->getLoan();
+    }
+
+    return nullptr;
 }
 
 Client& Client::operator=(const Client& rhs) {

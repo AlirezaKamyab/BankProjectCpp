@@ -2,20 +2,22 @@
 #include <sstream>
 
 Account::Account() : _accountNumber{""}, _ownersId{""}, _balance{0}, _activated{false}, _validationCount{0}, _creationDate{1,1,1390}, 
-    _bank{nullptr} {}
+    _bank{nullptr}, _loan{nullptr} {}
 
 Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate, Bank* bank) : Account{accountNumber,
     ownersId, creationDate, 0, 0, true, bank} {}
 
 Account::Account(const string& accountNumber, const string& ownersId, const Date& creationDate, const int64_t& balance,
     const int& validationCount, const bool& status, Bank* bank) : _accountNumber{accountNumber}, _ownersId{ownersId}, _activated{status}, 
-    _creationDate{creationDate}, _bank{bank} { 
+    _creationDate{creationDate}, _bank{bank}, _loan{nullptr} { 
         setBalance(balance);
         setValidationCount(validationCount);
     }
 
 Account::Account(const Account& other) : Account{other._accountNumber, other._ownersId, other._creationDate, other._balance,
-    other._validationCount, other._activated, other._bank} {}
+    other._validationCount, other._activated, other._bank} {
+        _loan = other._loan;
+    }
 
 Account::Account(Account&& other) noexcept : Account{other} { other.reset(); }
 
@@ -28,6 +30,7 @@ void Account::reset() {
     _activated = false;
     _validationCount = 0;
     _bank = nullptr;
+    _loan = nullptr;
     _creationDate = Date{1, 1, 1390};
 }
 
@@ -40,6 +43,9 @@ void Account::setValidationCount(const int& validationCount) {
     if(validationCount < 0) throw AccountException{"Validation count cannot be less than zero!"};
     _validationCount = validationCount;
 }
+
+Loan* Account::getLoan() const { return _loan; }
+void Account::setLoan(Loan* loan) { _loan = loan; } 
 
 void Account::changeStatus(const bool& newStatus) { _activated = newStatus; }
 string Account::getAccountNumber() const { return _accountNumber; }
@@ -58,6 +64,7 @@ Account& Account::operator=(const Account& rhs) {
     _validationCount = rhs._validationCount;
     _creationDate = rhs._creationDate;
     _bank = rhs._bank;
+    _loan = rhs._loan;
     return *this;
 }
 

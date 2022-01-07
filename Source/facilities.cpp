@@ -36,6 +36,7 @@ void Facilities::acceptARequest() {
     if(_acceptedOneRequest) throw EmployeeException{"One request has been accepted for today"};
     for(int i = 0; i < requests.size(); i++) {
         Account* temp = requests[i].getAccount();
+        if(temp->getLoan() != nullptr) throw FacilitiesException{"Your already have a loan on this account!"};
         if(temp->getStatus() == false) continue;
         if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) continue;
         int64_t newAmount = temp->getValidationCount() * temp->getBalance();
@@ -44,7 +45,7 @@ void Facilities::acceptARequest() {
         Date loanCreationDate{1,1,1390}; // this should be changed
         Loan* loan = new Loan{serial.str(), temp, loanCreationDate, newAmount, requests[i].getType()};
         requests.erase(requests.begin() + i);
-        _bank->_loans.push_back(loan);
+        temp->setLoan(loan);
         return;
     }
 }

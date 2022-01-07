@@ -2,8 +2,11 @@
 #define ACCOUNT_H
 
 #include <string>
+#include <vector>
 #include "date.h"
 using namespace std;
+
+class Loan;
 
 class AccountException : public exception {
 public:
@@ -38,6 +41,8 @@ public:
     int64_t getBalance() const;
     int getValidationCount() const;
     Bank* getBank() const;
+    Loan* getLoan() const;
+    void setLoan(Loan*);
 
     Account& operator=(const Account&);
     operator string() const;
@@ -50,6 +55,7 @@ private:
     int _validationCount;
     bool _activated;
     Bank* _bank;
+    Loan* _loan;
 
     const static int64_t validAmount = 1e6;
 

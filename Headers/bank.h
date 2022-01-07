@@ -35,7 +35,6 @@ public:
     const Client* searchClient(const string&) const;
     const Employee* searchEmployee(const int&) const;
     const Loan* searchLoans(const string&) const;
-    const vector<const Loan*> getClientLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;
 
@@ -47,7 +46,6 @@ public:
 private:
     vector<Client*> _clients;
     vector<Employee*> _employees;
-    vector<Loan*> _loans;
     Manager* _manager;
     Facilities* _facilities;
     
