@@ -1,5 +1,10 @@
 #include <iostream>
 #include "Headers/manager.h"
+#include "Headers/employee.h"
+#include "Headers/client.h"
+#include "Headers/account.h"
+#include "Headers/facilities.h"
+#include "Headers/bank.h"
 using namespace std;
 
 
