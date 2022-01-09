@@ -30,6 +30,7 @@ void Account::reset() {
     _activated = false;
     _validationCount = 0;
     _bank = nullptr;
+    delete _loan;
     _loan = nullptr;
     _creationDate = Date{1, 1, 1390};
 }

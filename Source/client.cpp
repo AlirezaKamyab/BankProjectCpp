@@ -26,6 +26,7 @@ Client::~Client() { reset(); }
 void Client::reset() {
     User::reset();
     Person::reset();
+    for(Account* account : _accounts) delete account;
     _accounts = vector<Account*>();
     _bank = nullptr;
 }
@@ -68,6 +69,7 @@ void Client::withdraw(const string& accountNumber, const int64_t& amount) const 
 void Client::requestLoan(const string& accountNumber, const LoanType& type) {
     Account* temp = getAccount(accountNumber);
     if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
+    if(temp->getBalance() < 1e6) throw AccountException{"Account balance should be at least 1,000,000"};
     if(temp->getStatus() == false) throw AccountException{"Account is de-activated!"};
 
     Request req{this, temp, type};
