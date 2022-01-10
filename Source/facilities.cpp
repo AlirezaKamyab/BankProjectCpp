@@ -36,9 +36,12 @@ void Facilities::acceptARequest() {
     if(_acceptedOneRequest) throw EmployeeException{"One request has been accepted for today"};
     for(int i = 0; i < requests.size(); i++) {
         Account* temp = requests[i].getAccount();
-        if(temp->getLoan() != nullptr) throw FacilitiesException{"Your already have a loan on this account!"};
-        if(temp->getStatus() == false) continue;
-        if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) continue;
+        if(temp->getLoan() != nullptr) {
+            requests.erase(requests.begin() + i);
+            throw FacilitiesException{"Your already have a loan on this account!"};
+        }
+        if(temp->getStatus() == false) requests.erase(requests.begin() + i);
+        if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) requests.erase(requests.begin() + i);
         int64_t newAmount = temp->getValidationCount() * temp->getBalance();
         stringstream serial;
         serial << setw(8) << lastSerialGenerated++;
