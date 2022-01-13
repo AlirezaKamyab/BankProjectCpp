@@ -11,7 +11,7 @@ Date Helper::getCurrentDate() {
     time_t t = time(0);
     tm* now = localtime(&t);
     Date temp {now->tm_mday, now->tm_mon, now->tm_year};
-<<<<<<< HEAD
+    return temp;
 }
 
 static string generateRandom(const int& size) {
@@ -29,6 +29,4 @@ static string generateRandom(const int& size) {
     }
 
     return n;
-=======
->>>>>>> 71c0cd1e7868008b9464955f633680b3349939f2
 }
