@@ -3,6 +3,7 @@
 
 #include <string>
 #include "date.h"
+#include "vector"
 using namespace std;
 
 class Account;
@@ -42,6 +43,7 @@ public:
     int getPaidPayments(void) const;
     int getOverduePayments(void) const;
     int64_t getEachPayment(void) const;
+    static bool isValidSerial(const string&);
 
     Loan& operator=(const Loan&);
     operator string() const;
@@ -56,6 +58,8 @@ private:
 
     Loan();
     void reset();
+
+    static vector<string> _loanSerials;
 };
 
 #endif // LOAN_H

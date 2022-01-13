@@ -3,11 +3,11 @@
 #include "../Headers/account.h"
 #include "../Headers/request.h"
 #include "../Headers/helperClass.h"
+#include "../Headers/helperClass.h"
 #include <sstream>
 #include <iomanip>
 
 vector<Request> Facilities::requests{};
-int Facilities::lastSerialGenerated = 0;
 bool Facilities::_acceptedOneRequest = false;
 
 Facilities::Facilities() : Employee{"", "", "", 0, Date{1, 1, 1390}, "", "", 0, 0, 0, nullptr} {}
@@ -44,10 +44,15 @@ void Facilities::acceptARequest() {
         if(temp->getStatus() == false) requests.erase(requests.begin() + i);
         if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) requests.erase(requests.begin() + i);
         int64_t newAmount = temp->getValidationCount() * temp->getBalance();
-        stringstream serial;
-        serial << setw(8) << lastSerialGenerated++;
         Date loanCreationDate = Helper::getCurrentDate();
-        Loan* loan = new Loan{serial.str(), temp, loanCreationDate, newAmount, requests[i].getType()};
+        
+        string serial;
+        while(true) {
+            serial = Helper::generateRandom(8);
+            if(Loan::isValidSerial(serial)) break;
+        }
+
+        Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[i].getType()};
         requests.erase(requests.begin() + i);
         temp->setLoan(loan);
         return;

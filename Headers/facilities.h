@@ -34,7 +34,6 @@ public:
 private:
     void reset();
     Facilities();
-    static int lastSerialGenerated;
     static vector<Request> requests;
     static bool _acceptedOneRequest;
 };

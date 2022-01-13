@@ -64,6 +64,13 @@ int64_t Loan::getEachPayment(void) const {
     return 0;
 }
 
+bool Loan::isValidSerial(const string& serial) {
+    for(string str : _loanSerials) {
+        if(serial == str) return false;
+    }
+    return true;
+}
+
 Loan& Loan::operator=(const Loan& rhs) {
     if(&rhs == this) return *this;
     _serialNumber = rhs._serialNumber;
