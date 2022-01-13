@@ -8,6 +8,7 @@
 
 
 class Helper {
+public:
     static Time getCurrentTime();
     static Date getCurrentDate();
     static string generateRandom(const int&);
