@@ -2,6 +2,7 @@
 #include "../Headers/bank.h"
 #include "../Headers/account.h"
 #include "../Headers/request.h"
+#include "../Headers/helperClass.h"
 #include <sstream>
 #include <iomanip>
 
@@ -45,7 +46,7 @@ void Facilities::acceptARequest() {
         int64_t newAmount = temp->getValidationCount() * temp->getBalance();
         stringstream serial;
         serial << setw(8) << lastSerialGenerated++;
-        Date loanCreationDate{1,1,1390}; // this should be changed
+        Date loanCreationDate = Helper::getCurrentDate();
         Loan* loan = new Loan{serial.str(), temp, loanCreationDate, newAmount, requests[i].getType()};
         requests.erase(requests.begin() + i);
         temp->setLoan(loan);
