@@ -54,7 +54,7 @@ public:
     Client* searchClient(const string& id) const;
     void enableAccount(const string&) const;
     void disableAccount(const string&) const; 
-    void createAccount(Client*, const int64_t&) const; // should be modified (important)
+    void createAccount(Client*, const int64_t&) const;
     void deleteAccount(const string&) const;
     string showClientInfo(const string&) const;
 

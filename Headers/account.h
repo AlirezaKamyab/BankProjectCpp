@@ -34,6 +34,7 @@ public:
     void changeStatus(const bool&);
     void setBalance(const int64_t&);
     void setValidationCount(const int&);
+    void setAccountNumber(const string&);
 
     string getAccountNumber() const;
     string getOwnersId() const;

@@ -1,6 +1,7 @@
 #include "../Headers/employee.h"
 #include "../Headers/bank.h"
 #include "../Headers/account.h"
+#include "../Headers/helperClass.h"
 #include <sstream>
 
 Employee::Employee() : Person{"", "", "", Date{1,1,1390}}, User{"Anonymouse", "Anonymouse"}, 
@@ -113,7 +114,7 @@ void Employee::disableAccount(const string& accountNumber) const {
 void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
     Account* account = new Account{"Random Number", client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
-    // while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account.setAccountNumber("Another Random");
+    while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(9));
     client->createAccount(*account);
 }
 

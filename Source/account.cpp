@@ -45,6 +45,10 @@ void Account::setValidationCount(const int& validationCount) {
     _validationCount = validationCount;
 }
 
+void Account::setAccountNumber(const string& accountNumber) {
+    _accountNumber = accountNumber;
+}
+
 Loan* Account::getLoan() const { return _loan; }
 void Account::setLoan(Loan* loan) { _loan = loan; } 
 
