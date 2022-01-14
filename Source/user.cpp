@@ -8,9 +8,18 @@ User::User(const string& username, const string& password) {
 
     _username = username;
     _password = password;
+
+    for(string user : _usernames) {
+        if(user == username) throw UserException{"Username is taken try another one!"};
+    }
+
+    _usernames.push_back(username);
 }
 
-User::User(const User& other) : User{other._username, other._password} {}
+User::User(const User& other) {
+    _username = other._username;
+    _password = other._password;
+}
 User::User(User&& other) noexcept : User(other) { other.reset(); }
 User::~User() { reset(); }
 
