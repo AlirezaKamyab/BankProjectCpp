@@ -10,11 +10,11 @@ Time Helper::getCurrentTime() {
 Date Helper::getCurrentDate() {
     time_t t = time(0);
     tm* now = localtime(&t);
-    Date temp {now->tm_mday, now->tm_mon, now->tm_year};
+    Date temp {now->tm_mday, now->tm_mon + 1, now->tm_year + 1900};
     return temp;
 }
 
-static string generateRandom(const int& size) {
+string Helper::generateRandom(const int& size) {
     static bool setSeed = false;
     if(!setSeed) {
         setSeed = true;
