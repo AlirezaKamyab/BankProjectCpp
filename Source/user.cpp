@@ -12,8 +12,11 @@ User::User(const string& username, const string& password) {
     for(string user : _usernames) {
         if(user == username) throw UserException{"Username is taken try another one!"};
     }
+<<<<<<< HEAD
 
     _usernames.push_back(username);
+=======
+>>>>>>> ca61f4a0cabba9b7055d84629d003f27b1e49c26
 }
 
 User::User(const User& other) {
