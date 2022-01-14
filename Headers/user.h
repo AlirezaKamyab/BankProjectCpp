@@ -2,6 +2,7 @@
 #define USER_H
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class UserException : public exception {
@@ -37,6 +38,9 @@ protected:
 
     User();
     void reset();
+
+private:
+    static vector<string> _usernames;
 };
 
 #endif // USER_H
