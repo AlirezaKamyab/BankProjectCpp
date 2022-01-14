@@ -48,7 +48,7 @@ bool Time::operator==(const Time& rhs) const {
 }
 Time::operator std::string() const {
     stringstream str;
-    str << setw(2) << _h;
+    str << setw(0) << setfill('0') << _h;
     str << ":";
     str << setw(2) << _m;
     str << ":";
