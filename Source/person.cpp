@@ -4,7 +4,14 @@
 Person::Person() {}
 
 Person::Person(const string& name, const string& lastname, const string& id, const Date& bdate) : _name{name},
-    _lastname{lastname}, _id{id}, _birthday{bdate} {}
+    _lastname{lastname}, _id{id}, _birthday{bdate} {
+        for(string str : _personIds) {
+            if(str == id) {
+                throw PersonException{"Duplicate person with the same id spotted!"};
+            }
+        }
+        _personIds.push_back(id);
+    }
 
 Person::Person(const Person& other) {
     _name = other._name;

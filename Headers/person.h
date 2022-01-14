@@ -2,7 +2,20 @@
 #define PERSON_H
 
 #include "date.h"
+#include <vector>
 using namespace std;
+
+class PersonException : public exception {
+public:
+    PersonException() : message{""} {}
+    explicit PersonException(const string& msg) : message{msg} {}
+    explicit PersonException(const char* msg) : message{msg} {}
+    virtual ~PersonException() {}
+
+    virtual const char* what(void) const noexcept { return message.c_str(); }
+private:
+    string message;
+};
 
 class Person {
 public:
@@ -29,6 +42,9 @@ protected:
     
     Person();
     void reset();
+
+private:
+    static vector<string> _personIds;
 };
 
 #endif // PERSON_H
