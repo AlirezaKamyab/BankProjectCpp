@@ -57,6 +57,7 @@ public:
     void createAccount(Client*, const int64_t&) const;
     void deleteAccount(const string&) const;
     string showClientInfo(const string&) const;
+    static int generatePersonnelId();
 
     Employee& operator=(const Employee&);
     operator std::string() const;
@@ -74,6 +75,7 @@ protected:
     static const int maxExtraHours = 12;
     static const int64_t leavePenalty = 100000;
     static const int64_t extraReward = 120000;
+    static int lastGeneratedPersonnelId;
 
     Employee();
     void reset();

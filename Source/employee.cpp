@@ -4,6 +4,8 @@
 #include "../Headers/helperClass.h"
 #include <sstream>
 
+int Employee::lastGeneratedPersonnelId = 100;
+
 Employee::Employee() : Person{"", "", "", Date{1,1,1390}}, User{"Anonymouse", "Anonymouse"}, 
     _vacationHours{0}, _extraHours{0}, _baseIncome{0}, _personnelId{0}, _employeeType{EmployeeType::EMPLOYEE} {}
 
@@ -116,6 +118,10 @@ void Employee::createAccount(Client* client, const int64_t& startingBalance) con
     Account* account = new Account{"Random Number", client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
     while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(9));
     client->createAccount(*account);
+}
+
+int Employee::generatePersonnelId() {
+    return ++lastGeneratedPersonnelId;
 }
 
 void Employee::deleteAccount(const string& accountNumber) const {
