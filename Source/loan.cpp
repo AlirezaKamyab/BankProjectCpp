@@ -2,6 +2,8 @@
 #include "../Headers/account.h"
 #include <sstream>
 
+vector<string> Loan::_loanSerials;
+
 Loan::Loan(const string& serialNumber, const Account* account, const Date& loanDate, const int64_t& value,
     const LoanType& loanType) : Loan(serialNumber, account, loanDate, value, loanType, 0, 0) {}
 

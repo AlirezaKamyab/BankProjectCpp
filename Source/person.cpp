@@ -1,6 +1,8 @@
 #include "../Headers/person.h"
 #include <sstream>
 
+vector<string> Person::_personIds;
+
 Person::Person() {}
 
 Person::Person(const string& name, const string& lastname, const string& id, const Date& bdate) : _name{name},

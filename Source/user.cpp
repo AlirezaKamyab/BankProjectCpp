@@ -1,6 +1,8 @@
 #include "../Headers/user.h"
 #include <sstream>
 
+vector<string> User::_usernames;
+
 User::User() {}
 User::User(const string& username, const string& password) {
     if(username.length() < 3) throw UserException{"Invalid username! username should be at least 3 characters."};
@@ -12,11 +14,8 @@ User::User(const string& username, const string& password) {
     for(string user : _usernames) {
         if(user == username) throw UserException{"Username is taken try another one!"};
     }
-<<<<<<< HEAD
 
     _usernames.push_back(username);
-=======
->>>>>>> ca61f4a0cabba9b7055d84629d003f27b1e49c26
 }
 
 User::User(const User& other) {
