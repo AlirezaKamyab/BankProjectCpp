@@ -3,6 +3,7 @@
         "xstring": "cpp",
         "memory": "cpp",
         "ostream": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "iomanip": "cpp"
     }
 }
