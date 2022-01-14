@@ -13,6 +13,8 @@ Loan::Loan(const string& serialNumber, const Account* account, const Date& loanD
         setRemainingPayments(remaining);
         setValue(value);
         setOverduePayments(overdue);
+
+        if(isValidSerial(serialNumber)) _loanSerials.push_back(serialNumber);
     }
 
 Loan::Loan(const Loan& other) : _serialNumber{other._serialNumber}, _linkedAccountNumber{other._linkedAccountNumber}, _loanDate{other._loanDate},
