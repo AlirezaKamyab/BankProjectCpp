@@ -178,3 +178,10 @@ Date& Date::operator++(void) {
 ostream& operator<<(ostream& o, const Date& dte) {
     return o << dte.get_year() << "/" << dte.get_month() << "/" << dte.get_day();
 }
+
+istream& operator>>(istream& in, Date& dte) {
+    string str;
+    cin >> str;
+    dte = Date::str_to_date(str);
+    return in;
+}

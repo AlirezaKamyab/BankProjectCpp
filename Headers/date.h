@@ -46,5 +46,6 @@ private:
 
 // Non-member functions
 ostream& operator<<(ostream& o, const Date& dte);
+istream& operator>>(istream& in, Date& dte);
 
 #endif // DATE_H
