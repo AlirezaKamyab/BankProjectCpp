@@ -37,6 +37,7 @@ public:
     const Loan* searchLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;
+    Employee* logAsEmployee(const string&, const string&) const;
 
     Bank& operator=(const Bank& other);
     friend class Employee;

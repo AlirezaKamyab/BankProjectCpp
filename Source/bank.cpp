@@ -89,6 +89,13 @@ const Employee* Bank::searchEmployee(const int& personnelId) const { return _sea
 const Loan* Bank::searchLoans(const string& serialNumber) const { return _searchLoans(serialNumber); }
 const Manager* Bank::getManager() const { return _manager; }
 const Facilities* Bank::getFacility() const { return _facilities; }
+Employee* Bank::logAsEmployee(const string& username, const string& password) const {
+    for(Employee* employee : _employees) {
+        if(employee->login(User{username, password})) return employee;
+    }
+
+    return nullptr;
+}
 
 Bank& Bank::operator=(const Bank& rhs) {
     if(&rhs == this) return *this;
