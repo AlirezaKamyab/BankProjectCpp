@@ -69,6 +69,7 @@ void Facilities::acceptARequest() {
 
 void Facilities::disableAccounts(Client* client) const {
     for(Account* account : client->_accounts) account->changeStatus(false);
+    lwkfjaslfkdjsafd
 }
 
 void Facilities::disableAccounts(const string& id) const {
