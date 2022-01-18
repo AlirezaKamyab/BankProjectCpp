@@ -51,7 +51,7 @@ void Facilities::acceptARequest() {
         requests.erase(requests.begin() + 0);
         acceptARequest();
     }
-    
+
     int64_t newAmount = temp->getValidationCount() * temp->getBalance();
     Date loanCreationDate = Helper::getCurrentDate();
     
@@ -74,7 +74,7 @@ void Facilities::disableAccounts(Client* client) const {
 void Facilities::disableAccounts(const string& id) const {
     Client* client = searchClient(id);
     if(client == nullptr) throw BankException{"Couldn't find the specified client inside the bank!"};
-    for(Account* account : client->_accounts) account->changeStatus(false);
+    disableAccounts(client);
 }
 
 string Facilities::showAllrequests() const {
