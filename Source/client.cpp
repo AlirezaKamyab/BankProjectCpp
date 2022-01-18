@@ -104,6 +104,9 @@ Client::operator std::string() const {
     str << "----------------------" << endl;
     str << "Accounts" << endl;
     for(Account* account : _accounts) str << account->operator std::string() << endl;
+    str << "----------------------" << endl;
+    str << "Loans" << endl;
+    str << showLoans() << endl;
 
     return str.str();
 }
