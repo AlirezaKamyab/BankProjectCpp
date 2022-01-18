@@ -7,7 +7,10 @@
 
 Bank::Bank() : _manager{nullptr}, _facilities{nullptr} {}
 Bank::Bank(Manager* manager) : Bank{manager, nullptr} {}
-Bank::Bank(Manager* manager, Facilities* facilities) : _manager{manager}, _facilities{facilities} {}
+Bank::Bank(Manager* manager, Facilities* facilities) : _manager{manager}, _facilities{facilities} {
+    _employees.push_back(manager);
+    if(facilities != nullptr) _employees.push_back(facilities);
+}
 Bank::Bank(const Bank& other) : Bank{other._manager, other._facilities} {
     for(Employee* emp : other._employees) _employees.push_back(emp); 
     for(Client* cli : other._clients) _clients.push_back(cli);
