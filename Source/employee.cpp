@@ -115,8 +115,8 @@ void Employee::disableAccount(const string& accountNumber) const {
 
 void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
-    Account* account = new Account{"Random Number", client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
-    while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(9));
+    Account* account = new Account{Helper::generateRandom(10), client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
+    while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
     client->createAccount(*account);
 }
 
