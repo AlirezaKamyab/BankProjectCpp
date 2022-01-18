@@ -5,6 +5,7 @@
 #include <string>
 using namespace std;
 
+class User;
 class Client;
 class Employee;
 class Facilities;
@@ -37,7 +38,10 @@ public:
     const Loan* searchLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;
+    Account* searchAccount(const string&) const;
     Employee* logAsEmployee(const string&, const string&) const;
+    User* searchUsername(const string&) const;
+    void withdrawLoan();
 
     Bank& operator=(const Bank& other);
     friend class Employee;
@@ -57,7 +61,6 @@ private:
     Client* _searchClient(const string&) const;
     Employee* _searchEmployee(const int&) const;
     Loan* _searchLoans(const string&) const;
-    Account* _searchAccount(const string&) const;
     Client* _ownerOfTheAccount(const string&) const;
 };
 

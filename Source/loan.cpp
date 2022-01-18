@@ -1,5 +1,6 @@
 #include "../Headers/loan.h"
 #include "../Headers/account.h"
+#include "../Headers/bank.h"
 #include <sstream>
 
 vector<string> Loan::_loanSerials;
@@ -57,7 +58,14 @@ Date Loan::getLoanDate(void) const { return _loanDate; }
 int64_t Loan::getValue(void) const { return _value; }
 LoanType Loan::getLoanType(void) const { return _loanType; }
 int Loan::getRemainingPayments(void) const { return _remaining_payments; }
-int Loan::getPaidPayments(void) const { return ((int)_loanType - _remaining_payments); }
+int Loan::getPaidPayments(void) const { 
+    switch(_loanType) {
+        case LoanType::MONTH_12: ((int)_loanType - 12); 
+        case LoanType::MONTH_24: ((int)_loanType - 24); 
+        case LoanType::MONTH_36: ((int)_loanType - 36); 
+    }
+    return 0;
+}
 int Loan::getOverduePayments(void) const { return _overdue_payments; }
 int64_t Loan::getEachPayment(void) const { 
     switch(_loanType) {
@@ -73,6 +81,20 @@ bool Loan::isValidSerial(const string& serial) {
         if(serial == str) return false;
     }
     return true;
+}
+
+void Loan::pay(Bank* bank) {
+    if(_remaining_payments == 0 && _overdue_payments == 0) return;
+    Account* acc = bank->searchAccount(_linkedAccountNumber);
+    if(acc == nullptr) throw LoanException{"Account does not exist in the specified bank!"};
+    if(acc->getBalance() >= getEachPayment()) {
+        acc->setBalance(acc->getBalance() - getEachPayment());
+        if(_remaining_payments > 0) _remaining_payments--;
+        else _overdue_payments--;
+    }
+    else {
+        _overdue_payments++;
+    }
 }
 
 Loan& Loan::operator=(const Loan& rhs) {

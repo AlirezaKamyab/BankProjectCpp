@@ -42,6 +42,7 @@ protected:
     
     Person();
     void reset();
+    static void deleteFromPersonIds(const string&);
 
 private:
     static vector<string> _personIds;

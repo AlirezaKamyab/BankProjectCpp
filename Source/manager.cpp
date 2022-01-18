@@ -10,7 +10,9 @@ Manager::Manager(const string& name, const string& lastname, const string& id, c
 
 Manager::Manager(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& birthday,
     const string& username, const string& password, const int64_t& baseIncome, const int& vacationHours, const int& extraHours, Bank* bank) :
-    Employee{name, lastname, id, personnelId, birthday, username, password, baseIncome, vacationHours, extraHours, bank} {}
+    Employee{name, lastname, id, personnelId, birthday, username, password, baseIncome, vacationHours, extraHours, bank} {
+        _employeeType = EmployeeType::MANAGER;
+    }
 
 Manager::Manager(const Manager& other) : Employee{other} {}
 Manager::Manager(Manager&& other) noexcept : Manager{other} { other.reset(); }
@@ -28,12 +30,15 @@ string Manager::employeeInfo(const int& personnelId) const {
 
 void Manager::hireEmployee(Employee* emp) const {
     // Bank handles the duplicate employees being added
+    if(_bank->searchUsername(emp->getUsername()) != nullptr) throw BankException{"Username already exists!"};
     _bank->addEmployee(emp);
 }
 
 void Manager::fireEmployee(const int& personnelId) const {
     for(int i = 0; i < _bank->_employees.size(); i++) {
         if(_bank->_employees[i]->getPersonnelId() == personnelId) {
+            if(_bank->_employees[i]->getId() == getId()) throw ManagerException{"Manager cannot fire him/her self!"};
+            delete _bank->_employees[i];
             _bank->_employees.erase(_bank->_employees.begin() + i);
             return;
         }

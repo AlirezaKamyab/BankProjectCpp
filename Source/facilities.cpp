@@ -19,7 +19,9 @@ Facilities::Facilities(const string& name, const string& lastname, const string&
 Facilities::Facilities(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& birthday,
     const string& username, const string& password, const int64_t& baseIncome, const int& vacationHours, const int& extraHours,
     Bank* bank) : Employee{name, lastname, id, personnelId, birthday, username, password, baseIncome, vacationHours, extraHours,
-    bank} {}
+    bank} {
+        _employeeType = EmployeeType::FACILITIES;
+    }
 
 Facilities::Facilities(const Facilities& other) : Employee{other} {}
 Facilities::Facilities(Facilities&& other) noexcept : Facilities{other} { other.reset(); }
@@ -62,7 +64,20 @@ string Facilities::acceptARequest() {
         if(Loan::isValidSerial(serial)) break;
     }
 
-    Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[0].getType()};
+    int remaining = 0;
+    switch(requests[0].getType()) {
+        case LoanType::MONTH_12:
+            remaining = 12;
+            break;
+        case LoanType::MONTH_24:
+            remaining = 24;
+            break;
+        case LoanType::MONTH_36:
+            remaining = 36;
+            break;
+    }
+
+    Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[0].getType(), remaining, 0};
     temp->setBalance(temp->getBalance() + newAmount);
     requests.erase(requests.begin() + 0);
     temp->setLoan(loan);

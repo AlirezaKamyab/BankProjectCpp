@@ -25,6 +25,9 @@ Bank::~Bank() {
 }
 
 void Bank::reset() {
+    for(Client* client : _clients) delete client;
+    for(Employee* emp : _employees) delete emp;
+
     _manager = nullptr;
     _facilities = nullptr;
     _clients.clear();
@@ -69,7 +72,7 @@ Loan* Bank::_searchLoans(const string& serialNumber) const {
     return nullptr;
 }
 
-Account* Bank::_searchAccount(const string& accountNumber) const {
+Account* Bank::searchAccount(const string& accountNumber) const {
     for(Client* client : _clients) {
         for(Account* account : client->_accounts) {
             if(account->getAccountNumber() == accountNumber) return account;
@@ -85,6 +88,31 @@ Client* Bank::_ownerOfTheAccount(const string& accountNumber) const {
         }
     }
     return nullptr;
+}
+
+User* Bank::searchUsername(const string& username) const {
+    for(Client* client : _clients) {
+        if(client->getUsername() == username) return client;
+    }
+
+    for(Employee* emp : _employees) {
+        if(emp->getUsername() == username) return emp;
+    }
+
+    return nullptr;
+}
+
+void Bank::withdrawLoan() {
+    for(Client* client : _clients) {
+        for(Account* account : client->_accounts) {
+            if(account->getLoan() == nullptr) continue;
+            account->getLoan()->pay(this);
+            if(account->getLoan()->getRemainingPayments() == 0) {
+                delete account->getLoan();
+                account->setLoan(nullptr);
+            }
+        }
+    }
 }
 
 const Client* Bank::searchClient(const string& id) const { return _searchClient(id); }

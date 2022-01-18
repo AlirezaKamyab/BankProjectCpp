@@ -81,5 +81,6 @@ Account::operator string() const {
     str << "Balance: " << _balance << endl;
     str << "Valid days: " << _validationCount << endl;
     str << "Status: " << ((_activated)? "Active" : "De-activated") << endl;
+    str << "Creation date: " << _creationDate << endl;
     return str.str();
 }

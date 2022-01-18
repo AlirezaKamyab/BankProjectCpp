@@ -25,6 +25,8 @@ public:
     User(User&&) noexcept;
     virtual ~User();
 
+    string getUsername() const;
+
     bool login(const User&) const;
     bool login(const string&, const string&) const;
 

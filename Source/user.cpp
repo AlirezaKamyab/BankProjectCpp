@@ -12,10 +12,10 @@ User::User(const string& username, const string& password) {
     _password = password;
 
     for(string user : _usernames) {
-        if(user == username) throw UserException{"Username is taken try another one!"};
+        if(user == username) return;
     }
 
-    _usernames.push_back(username);
+     _usernames.push_back(username);
 }
 
 User::User(const User& other) {
@@ -32,6 +32,8 @@ bool User::login(const User& user) const {
 bool User::login(const string& username, const string& password) const {
     return (_username == username && _password == password);
 }
+
+string User::getUsername() const { return _username; }
 
 void User::reset() {
     _username = "";

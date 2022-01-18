@@ -7,6 +7,7 @@
 using namespace std;
 
 class Account;
+class Bank;
 
 class LoanException : public exception {
 public:
@@ -42,6 +43,7 @@ public:
     int getRemainingPayments(void) const;
     int getPaidPayments(void) const;
     int getOverduePayments(void) const;
+    void pay(Bank*);
     int64_t getEachPayment(void) const;
     static bool isValidSerial(const string&);
 

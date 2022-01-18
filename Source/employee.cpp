@@ -84,7 +84,7 @@ void Employee::setBank(Bank* bank) {
 }
 
 void Employee::takeHoursOff(const int& hours) {
-    if(_penalty + Employee::leavePenalty > getIncome()) throw EmployeeException{"Too much leave hours has been recorded!"};
+    if(_penalty + (Employee::leavePenalty * (_vacationHours + hours - Employee::maxLeaveHours)) > getIncome()) throw EmployeeException{"Too much leave hours has been recorded!"};
 
     _vacationHours += hours;
     if(_vacationHours >= Employee::maxLeaveHours) _penalty = (_vacationHours - Employee::maxLeaveHours) * Employee::leavePenalty;
@@ -102,21 +102,22 @@ Client* Employee::searchClient(const string& id) const {
 }
 
 void Employee::enableAccount(const string& accountNumber) const {
-    Account* account = _bank->_searchAccount(accountNumber);
+    Account* account = _bank->searchAccount(accountNumber);
     if(account == nullptr) throw EmployeeException{"Cannot find the specified account in the bank!"};
     account->changeStatus(true);
 }
 
 void Employee::disableAccount(const string& accountNumber) const {
-    Account* account = _bank->_searchAccount(accountNumber);
+    Account* account = _bank->searchAccount(accountNumber);
     if(account == nullptr) throw EmployeeException{"Cannot find the specified account in the bank!"};
     account->changeStatus(false);
 }
 
 void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
+    if(_bank->searchUsername(client->getUsername()) != nullptr) throw BankException{"Username already exists!"};
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
     Account* account = new Account{Helper::generateRandom(10), client->getId(), Date{1,1,1390}, startingBalance, 0, true, _bank};
-    while(_bank->_searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
+    while(_bank->searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
     client->createAccount(*account);
 }
 
@@ -129,19 +130,24 @@ void Employee::deleteAccount(const string& accountNumber) const {
     if(owner == nullptr) throw EmployeeException{"Cound't find the specified account in the bank!"};
     for(int i = 0; i < owner->_accounts.size(); i++) {
         if(owner->_accounts[i]->getAccountNumber() == accountNumber) {
+            delete owner->_accounts[i];
             owner->_accounts.erase(owner->_accounts.begin() + i);
             break;
         }
     }
 
+
     if(owner->_accounts.size() == 0) {
+        Person::deleteFromPersonIds(owner->getId());
         for(int i = 0; i < _bank->_clients.size(); i++) {
             if(_bank->_clients[i]->getId() == owner->getId()) {
-                _bank->_clients.erase(_bank->_clients.erase(_bank->_clients.begin() + i));
+                delete owner;
+                _bank->_clients.erase(_bank->_clients.begin() + i);
                 break;
             }
         }
     }
+
 
     return;
 }

@@ -39,6 +39,15 @@ void Person::reset() {
     _birthday = Date{1,1,1390};
 }
 
+void Person::deleteFromPersonIds(const string& id) {
+    for(int i = 0; i < _personIds.size(); i++) {
+        if(_personIds[i] == id) {
+            _personIds.erase(_personIds.begin() + i);
+            return;
+        }
+    }
+}
+
 Person& Person::operator=(const Person& rhs) {
     if(&rhs == this) return *this;
     _name = rhs._name;
