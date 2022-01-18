@@ -2,8 +2,6 @@
 #include "../Headers/bank.h"
 #include <sstream>
 
-int Manager::uniqueNumber = 100;
-
 Manager::Manager() : Employee{"", "", "", 0, Date{1, 1, 1390}, "", "", 0, 0, 0, nullptr} {}
 
 Manager::Manager(const string& name, const string& lastname, const string& id, const int& personnelId, const Date& birthday,
@@ -29,6 +27,7 @@ string Manager::employeeInfo(const int& personnelId) const {
 }
 
 void Manager::hireEmployee(Employee* emp) const {
+    // Bank handles the duplicate employees being added
     _bank->addEmployee(emp);
 }
 
@@ -36,8 +35,11 @@ void Manager::fireEmployee(const int& personnelId) const {
     for(int i = 0; i < _bank->_employees.size(); i++) {
         if(_bank->_employees[i]->getPersonnelId() == personnelId) {
             _bank->_employees.erase(_bank->_employees.begin() + i);
+            return;
         }
     }
+
+    throw ManagerException{"No such employee with specified personnel id found inside bank."};
 }
 
 Manager& Manager::operator=(const Manager& rhs) {
