@@ -31,9 +31,6 @@ public:
     Client(Client&&) noexcept;
     ~Client();
 
-    Bank* getBank(void) const;
-    void setBank(Bank* bank);
-
     void createAccount(Account&);
     Account* getAccount(const string&) const;
     void deposit(const string&, const int64_t&) const;
@@ -50,7 +47,6 @@ public:
     friend class Bank;
 private:
     vector<Account*> _accounts;
-    Bank* _bank;
     
     Client();
     void reset();

@@ -8,14 +8,14 @@
 Client::Client() : Person{"", "", "", Date{}}, User{"Anonymouse", "Anonymouse"} {}
 
 Client::Client(const string& name, const string& lastname, const string& id, const Date& bdate,
-        const string& username, const string& password) : Person{name, lastname, id, bdate}, User{username, password}, _bank{nullptr} {}
+        const string& username, const string& password) : Person{name, lastname, id, bdate}, User{username, password} {}
 
 Client::Client(const string& name, const string& lastname, const string& id, const Date& bdate,
         const string& username, const string& password, const vector<Account*>& accounts) : 
-        Person{name, lastname, id, bdate}, User{username, password}, _accounts{accounts}, _bank{nullptr} {}
+        Person{name, lastname, id, bdate}, User{username, password}, _accounts{accounts} {}
 
 Client::Client(const Client& other) : Person{other._name, other._lastname, other._id, other._birthday},
-        User{other._username, other._password}, _accounts{other._accounts}, _bank{other._bank} {}
+        User{other._username, other._password}, _accounts{other._accounts} {}
 
 Client::Client(Client&& other) noexcept : Client{other} {
     other.reset();
@@ -28,7 +28,6 @@ void Client::reset() {
     Person::reset();
     for(Account* account : _accounts) delete account;
     _accounts = vector<Account*>();
-    _bank = nullptr;
 }
 
 void Client::createAccount(Account& account) {
@@ -43,22 +42,15 @@ Account* Client::getAccount(const string& accountNumber) const {
     return nullptr;
 }
 
-Bank* Client::getBank(void) const { return _bank; }
-
-void Client::setBank(Bank* bank) { 
-    if(_bank == nullptr) throw ClientException{"Bank cannot be set to nullptr!"};
-    _bank = bank; 
-}
-
 void Client::deposit(const string& accountNumber, const int64_t& amount) const {
-    if(amount < 0) throw AccountException{"Cannot deposit a negative"};
+    if(amount < 0) throw AccountException{"Cannot deposit a negative amount"};
     Account* temp = getAccount(accountNumber);
     if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
     temp->setBalance(temp->getBalance() + amount);
 }
 
 void Client::withdraw(const string& accountNumber, const int64_t& amount) const {
-    if(amount < 0) throw AccountException{"Cannot withdraw a negative"};
+    if(amount < 0) throw AccountException{"Cannot withdraw a negative amount"};
     Account* temp = getAccount(accountNumber);
     if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
     if(temp->getStatus() == false) throw AccountException{"Account is de-activated!"};
@@ -80,7 +72,6 @@ void Client::requestLoan(const string& accountNumber, const LoanType& type) {
 string Client::showLoans() const {
     stringstream str;
 
-    if(_bank == nullptr) throw ClientException{"Bank for this client is not specified!"};
     for(Account* account : _accounts) {
         if(account->getLoan() == nullptr) continue;
         str << (string) *account->getLoan() << "\n" << endl;
