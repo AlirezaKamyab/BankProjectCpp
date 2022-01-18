@@ -24,7 +24,7 @@ public:
     virtual ~Facilities();
 
     static void addLoanRequest(const Request&);
-    void acceptARequest();
+    string acceptARequest();
     void disableAccounts(Client*) const;
     void disableAccounts(const string&) const;
     string showAllrequests() const;

@@ -36,8 +36,9 @@ void Facilities::addLoanRequest(const Request& request) {
     requests.push_back(request);
 }
 
-void Facilities::acceptARequest() {
+string Facilities::acceptARequest() {
     if(_acceptedOneRequest) throw FacilitiesException{"One request has been accepted for today"};
+    if(requests.size() == 0) return "";
     Account* temp = requests[0].getAccount();
     if(temp->getLoan() != nullptr) {
         requests.erase(requests.begin() + 0);
@@ -62,9 +63,10 @@ void Facilities::acceptARequest() {
     }
 
     Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[0].getType()};
+    temp->setBalance(temp->getBalance() + newAmount);
     requests.erase(requests.begin() + 0);
     temp->setLoan(loan);
-    return;
+    return serial;
 }
 
 void Facilities::disableAccounts(Client* client) const {
