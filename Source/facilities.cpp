@@ -30,6 +30,9 @@ void Facilities::reset() {
 }
 
 void Facilities::addLoanRequest(const Request& request) {
+    for(Request req : requests) {
+        if(req.getAccount()->getAccountNumber() == request.getAccount()->getAccountNumber()) throw FacilitiesException{"Previous request is still pending!"};
+    }
     requests.push_back(request);
 }
 
