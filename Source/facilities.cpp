@@ -37,29 +37,34 @@ void Facilities::addLoanRequest(const Request& request) {
 }
 
 void Facilities::acceptARequest() {
-    if(_acceptedOneRequest) throw EmployeeException{"One request has been accepted for today"};
-    for(int i = 0; i < requests.size(); i++) {
-        Account* temp = requests[i].getAccount();
-        if(temp->getLoan() != nullptr) {
-            requests.erase(requests.begin() + i);
-            throw FacilitiesException{"Your already have a loan on this account!"};
-        }
-        if(temp->getStatus() == false) requests.erase(requests.begin() + i);
-        if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) requests.erase(requests.begin() + i);
-        int64_t newAmount = temp->getValidationCount() * temp->getBalance();
-        Date loanCreationDate = Helper::getCurrentDate();
-        
-        string serial;
-        while(true) {
-            serial = Helper::generateRandom(8);
-            if(Loan::isValidSerial(serial)) break;
-        }
-
-        Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[i].getType()};
-        requests.erase(requests.begin() + i);
-        temp->setLoan(loan);
-        return;
+    if(_acceptedOneRequest) throw FacilitiesException{"One request has been accepted for today"};
+    Account* temp = requests[0].getAccount();
+    if(temp->getLoan() != nullptr) {
+        requests.erase(requests.begin() + 0);
+        acceptARequest();
     }
+    if(temp->getStatus() == false) {
+        requests.erase(requests.begin() + 0);
+        acceptARequest();
+    }
+    if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) {
+        requests.erase(requests.begin() + 0);
+        acceptARequest();
+    }
+    
+    int64_t newAmount = temp->getValidationCount() * temp->getBalance();
+    Date loanCreationDate = Helper::getCurrentDate();
+    
+    string serial;
+    while(true) {
+        serial = Helper::generateRandom(8);
+        if(Loan::isValidSerial(serial)) break;
+    }
+
+    Loan* loan = new Loan{serial, temp, loanCreationDate, newAmount, requests[0].getType()};
+    requests.erase(requests.begin() + 0);
+    temp->setLoan(loan);
+    return;
 }
 
 void Facilities::disableAccounts(Client* client) const {
