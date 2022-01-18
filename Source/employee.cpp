@@ -84,7 +84,7 @@ void Employee::setBank(Bank* bank) {
 }
 
 void Employee::takeHoursOff(const int& hours) {
-    if(_penalty >= getIncome()) throw EmployeeException{"Too much leave hours has been recorded!"};
+    if(_penalty + Employee::leavePenalty > getIncome()) throw EmployeeException{"Too much leave hours has been recorded!"};
 
     _vacationHours += hours;
     if(_vacationHours >= Employee::maxLeaveHours) _penalty = (_vacationHours - Employee::maxLeaveHours) * Employee::leavePenalty;
