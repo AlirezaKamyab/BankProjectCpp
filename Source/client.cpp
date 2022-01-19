@@ -101,12 +101,9 @@ Client::operator std::string() const {
     str << Person::operator std::string() << endl;
     str << User::operator std::string() << endl;
 
-    str << "----------------------" << endl;
-    str << "Accounts" << endl;
+    str << "         Accounts" << endl;
+    str << "---------------------------" << endl;
     for(Account* account : _accounts) str << account->operator std::string() << endl;
-    str << "----------------------" << endl;
-    str << "Loans" << endl;
-    str << showLoans() << endl;
 
     return str.str();
 }

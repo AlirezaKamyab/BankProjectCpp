@@ -4,6 +4,7 @@
 #include "../Headers/facilities.h"
 #include "../Headers/manager.h"
 #include "../Headers/loan.h"
+#include <sstream>
 
 Bank::Bank() : _manager{nullptr}, _facilities{nullptr} {}
 Bank::Bank(Manager* manager) : Bank{manager, nullptr} {}
@@ -35,7 +36,6 @@ void Bank::reset() {
 }
 
 void Bank::addEmployee(Employee* employee) {
-    if(employee->getEmployeeType() != EmployeeType::EMPLOYEE) throw BankException{"A simple employee was needed, facility or manager was given!"};
     if(employee == nullptr) throw BankException{"Invalid employee!"};
     Employee* temp = _searchEmployee(employee->getPersonnelId());
     if(temp != nullptr) throw BankException{"Another employee with the same personnel id exists!"};
@@ -102,7 +102,8 @@ User* Bank::searchUsername(const string& username) const {
     return nullptr;
 }
 
-void Bank::withdrawLoan() {
+string Bank::withdrawLoan() {
+    stringstream msg;
     for(Client* client : _clients) {
         for(Account* account : client->_accounts) {
             if(account->getLoan() == nullptr) continue;
@@ -111,8 +112,30 @@ void Bank::withdrawLoan() {
                 delete account->getLoan();
                 account->setLoan(nullptr);
             }
+
+            if(account->getLoan()->getOverduePayments() == 1) {
+                msg << "Insufficient balance for account number " << account->getAccountNumber() << endl;
+            }
+            else if(account->getLoan()->getOverduePayments() >= 2) {
+                bool flag = true;
+                for(Account* acc : client->_accounts) {
+                    if(acc->getBalance() < acc->getLoan()->getOverduePayments() * acc->getLoan()->getEachPayment()) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag) {
+                    for(Account* a : client->_accounts) a->changeStatus(true);
+                }
+                else {
+                    for(Account* a : client->_accounts) a->changeStatus(false);
+                    msg << "All of the accounts of client with ID " << client->getId() << " is deactivated!" << endl;
+                }
+            }
         }
     }
+
+    return msg.str();
 }
 
 const Client* Bank::searchClient(const string& id) const { return _searchClient(id); }
@@ -125,6 +148,13 @@ Employee* Bank::logAsEmployee(const string& username, const string& password) co
         if(employee->login(User{username, password})) return employee;
     }
 
+    return nullptr;
+}
+
+Client* Bank::logAsClient(const string& username, const string& password) const {
+    for(Client* client : _clients) {
+        if(client->login(username, password)) return client;
+    }
     return nullptr;
 }
 

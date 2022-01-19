@@ -44,15 +44,15 @@ string Facilities::acceptARequest() {
     Account* temp = requests[0].getAccount();
     if(temp->getLoan() != nullptr) {
         requests.erase(requests.begin() + 0);
-        acceptARequest();
+        return acceptARequest();
     }
     if(temp->getStatus() == false) {
         requests.erase(requests.begin() + 0);
-        acceptARequest();
+        return acceptARequest();
     }
     if(temp->getValidationCount() == 0 || temp->getBalance() < 1e6) {
         requests.erase(requests.begin() + 0);
-        acceptARequest();
+        return acceptARequest();
     }
 
     int64_t newAmount = temp->getValidationCount() * temp->getBalance();
@@ -96,12 +96,15 @@ void Facilities::disableAccounts(const string& id) const {
 
 string Facilities::showAllrequests() const {
     stringstream str;
-    for(Request req : requests) str << req.operator std::string() << "\n" << endl;
+    for(Request req : requests) {
+        str << req.operator std::string() << "\n" << endl;
+    }
     return str.str();
 }
 
 string Facilities::loanInfo(const string& serialNumber) const {
     const Loan* loan = _bank->searchLoans(serialNumber);
+    if(loan == nullptr) throw LoanException{"No loan found with specified serial number"};
     return loan->operator std::string();
 }
 

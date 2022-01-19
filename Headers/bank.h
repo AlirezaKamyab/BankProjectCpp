@@ -40,8 +40,9 @@ public:
     const Facilities* getFacility() const;
     Account* searchAccount(const string&) const;
     Employee* logAsEmployee(const string&, const string&) const;
+    Client* logAsClient(const string&, const string&) const;
     User* searchUsername(const string&) const;
-    void withdrawLoan();
+    string withdrawLoan();
 
     Bank& operator=(const Bank& other);
     friend class Employee;

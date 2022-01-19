@@ -32,6 +32,7 @@ void Manager::hireEmployee(Employee* emp) const {
     // Bank handles the duplicate employees being added
     if(_bank->searchUsername(emp->getUsername()) != nullptr) throw BankException{"Username already exists!"};
     _bank->addEmployee(emp);
+    if(emp->getEmployeeType() == EmployeeType::FACILITIES) _bank->_facilities = dynamic_cast<Facilities*>(emp);
 }
 
 void Manager::fireEmployee(const int& personnelId) const {
