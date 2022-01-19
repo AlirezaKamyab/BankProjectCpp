@@ -57,6 +57,7 @@ void Account::changeStatus(const bool& newStatus) { _activated = newStatus; }
 string Account::getAccountNumber() const { return _accountNumber; }
 string Account::getOwnersId() const { return _ownersId; }
 int64_t Account::getBalance() const { return _balance; }
+Date Account::getCreationDate() const { return _creationDate; }
 int Account::getValidationCount() const { return _validationCount; }
 bool Account::getStatus() const { return _activated; }
 Bank* Account::getBank() const { return _bank; }

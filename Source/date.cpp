@@ -1,4 +1,5 @@
 #include "../Headers/date.h"
+#include <sstream>
 
 Date::Date()
 {
@@ -120,13 +121,16 @@ int Date::days_between(const Date& d1, const Date& d2) {
 }
 
 Date Date::str_to_date(string s) {
-    //TODO: Handle formatting errors
-    int slash_pos = s.find('/'); //3/12/1394 => slash_pos=1
-    int d = stoi(s.substr(0, slash_pos)); //=> d=3
-    s = s.substr(slash_pos + 1);//=>s=12/1394
-    slash_pos = s.find('/');//=>slash_pos=2
-    int m = stoi(s.substr(0, slash_pos));//=>m=12
-    int y = stoi(s.substr(slash_pos + 1));//=>y=1394
+    for(char& c : s) {
+        if(c == '/') c = ' ';
+    }
+
+    int d, m, y;
+    stringstream stream{s};
+    
+    stream >> y;
+    stream >> m;
+    stream >> d;
 
     return Date(d, m, y);
 }

@@ -44,6 +44,7 @@ public:
     Bank* getBank() const;
     Loan* getLoan() const;
     void setLoan(Loan*);
+    Date getCreationDate() const;
 
     Account& operator=(const Account&);
     operator string() const;

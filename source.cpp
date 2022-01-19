@@ -26,16 +26,25 @@ int main() {
     Bank* aimlessly = new Bank{manager};
     manager->setBank(aimlessly);
 
-    Employee* emp = new Employee{"Mahdi", "Yousefi", "123456789", Employee::generatePersonnelId(), Date{1,1,1399}, "aaa", "aaaaaaaaa", 3500000, 0, 0, aimlessly};
-    manager->hireEmployee(emp);
-
-    Facilities* fac = new Facilities{"Test", "Test", "346515", Employee::generatePersonnelId(), Date{1,1,1}, "test", "testtest", 2462162,0,0, aimlessly};
-    manager->hireEmployee(fac);
-
-    Client* client = new Client{"someone", "something", "10203040", Date{19,1,2022}, "someone", "something"};
-    manager->createAccount(client, 1000000000);
+    try {
+        aimlessly->readClientFromFile("clients.txt");
+        aimlessly->readAccountFromFile("accounts.txt");
+        aimlessly->readLoanFromFile("loans.txt");
+        aimlessly->readRequestFromFile("requests.txt");
+        aimlessly->readEmployeeFromFile("employees.txt");
+    }
+    catch(exception& ex) {}
 
     mainMenu(aimlessly);
+    aimlessly->endOfTheDay();
+
+    aimlessly->writeClientToFile("clients.txt");
+    aimlessly->writeAccountToFile("accounts.txt");
+    aimlessly->writeLoanToFile("loans.txt");
+    aimlessly->writeRequestToFile("requests.txt");
+    aimlessly->writeEmployeeToFile("employees.txt");
+
+    delete aimlessly;
     awaitKey();
     return 0;
 }
@@ -124,10 +133,10 @@ void staffMenu(Bank* bank) {
     Manager* mlogged = nullptr;
 
     if(logged->getEmployeeType() == EmployeeType::FACILITIES) {
-        flogged = dynamic_cast<Facilities*>(logged);
+        flogged = (Facilities*) logged;
     }
     else if(logged->getEmployeeType() == EmployeeType::MANAGER) {
-        mlogged = dynamic_cast<Manager*>(logged);
+        mlogged = (Manager*) logged;
     }
 
 
@@ -579,6 +588,7 @@ void clientMenu(Bank* bank) {
                     cout << "1- Account info" << endl;
                     cout << "2- Loan info" << endl;
                     cout << "3- Back" << endl;
+                    cout << ">> ";
                     char input;
                     cin >> input;
 

@@ -43,6 +43,19 @@ public:
     Client* logAsClient(const string&, const string&) const;
     User* searchUsername(const string&) const;
     string withdrawLoan();
+    string endOfTheDay();
+
+    void readClientFromFile(const string&);
+    void readAccountFromFile(const string&);
+    void readLoanFromFile(const string&);
+    void readRequestFromFile(const string&);
+    void readEmployeeFromFile(const string&);
+    
+    void writeClientToFile(const string&);
+    void writeAccountToFile(const string&);
+    void writeLoanToFile(const string&);
+    void writeRequestToFile(const string&);
+    void writeEmployeeToFile(const string&);
 
     Bank& operator=(const Bank& other);
     friend class Employee;

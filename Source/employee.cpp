@@ -78,6 +78,11 @@ void Employee::setVacationHours(const int& vacationHours) {
     _vacationHours = vacationHours;
 }
 
+void Employee::setEmployeeType(const EmployeeType& type) { _employeeType = type; }
+
+void Employee::setLastGeneratedPersonnelId(const int& lgpi) { lastGeneratedPersonnelId = lgpi; }
+int Employee::getLastgGeneratedPersonnelId() { return lastGeneratedPersonnelId; }
+
 void Employee::setBank(Bank* bank) {
     if(bank == nullptr) throw EmployeeException{"Bank cannot be set to null after the initialization!"};
     _bank = bank;
@@ -114,7 +119,6 @@ void Employee::disableAccount(const string& accountNumber) const {
 }
 
 void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
-    if(_bank->searchUsername(client->getUsername()) != nullptr) throw BankException{"Username already exists!"};
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
     Account* account = new Account{Helper::generateRandom(10), client->getId(), Helper::getCurrentDate(), startingBalance, 0, true, _bank};
     while(_bank->searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
@@ -122,7 +126,7 @@ void Employee::createAccount(Client* client, const int64_t& startingBalance) con
 }
 
 int Employee::generatePersonnelId() {
-    return ++lastGeneratedPersonnelId;
+    return lastGeneratedPersonnelId++;
 }
 
 void Employee::deleteAccount(const string& accountNumber) const {

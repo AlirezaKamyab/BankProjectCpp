@@ -31,6 +31,7 @@ public:
     string loanInfo(const string&) const;
 
     Facilities& operator=(const Facilities&);
+    friend class Bank;
 private:
     void reset();
     Facilities();

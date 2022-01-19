@@ -82,6 +82,7 @@ string Client::showLoans() const {
 
 Loan* Client::searchLoan(const string& serial) const {
     for(Account* account : _accounts) {
+        if(account->getLoan() == nullptr) continue;
         if(account->getLoan()->getSerialNumber() == serial) return account->getLoan();
     }
 

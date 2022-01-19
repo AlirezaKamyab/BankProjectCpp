@@ -34,6 +34,7 @@ bool User::login(const string& username, const string& password) const {
 }
 
 string User::getUsername() const { return _username; }
+string User::getPassword() const { return _password; }
 
 void User::reset() {
     _username = "";

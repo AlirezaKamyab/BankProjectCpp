@@ -60,18 +60,18 @@ LoanType Loan::getLoanType(void) const { return _loanType; }
 int Loan::getRemainingPayments(void) const { return _remaining_payments; }
 int Loan::getPaidPayments(void) const { 
     switch(_loanType) {
-        case LoanType::MONTH_12: ((int)_loanType - 12); 
-        case LoanType::MONTH_24: ((int)_loanType - 24); 
-        case LoanType::MONTH_36: ((int)_loanType - 36); 
+        case LoanType::MONTH_12: return (12 - _remaining_payments); 
+        case LoanType::MONTH_24: return (24 - _remaining_payments); 
+        case LoanType::MONTH_36: return (36 - _remaining_payments); 
     }
     return 0;
 }
 int Loan::getOverduePayments(void) const { return _overdue_payments; }
 int64_t Loan::getEachPayment(void) const { 
     switch(_loanType) {
-        case LoanType::MONTH_12: return _value + ((_value * (int)_loanType) / 12);
-        case LoanType::MONTH_24: return _value + ((_value * (int)_loanType) / 24);
-        case LoanType::MONTH_36: return _value + ((_value * (int)_loanType) / 36);
+        case LoanType::MONTH_12: return (_value + ((_value * (int)_loanType) / 100)) / 12;
+        case LoanType::MONTH_24: return (_value + ((_value * (int)_loanType) / 100)) / 24;
+        case LoanType::MONTH_36: return (_value + ((_value * (int)_loanType) / 100)) / 36;
     }
     return 0;
 }
