@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include "Headers/manager.h"
 #include "Headers/employee.h"
 #include "Headers/client.h"
@@ -7,6 +8,14 @@
 #include "Headers/bank.h"
 #include "Headers/helperClass.h"
 using namespace std;
+
+void reportClientLogin(Bank*, const Person*);
+void reportStaffLogin(Bank*, const Person*);
+void reportAccountCreation(Bank*, const Person*);
+void reportDeposite(Bank*, const Person*, const int64_t&);
+void reportLoan(Bank*, const Person*, const int64_t&);
+void reportLeave(Bank*, const Person*, const int&);
+void reportBan(Bank*, const Person*);
 
 void printMainMenu();
 void printStaffMenu(Employee*);
@@ -129,6 +138,8 @@ void staffMenu(Bank* bank) {
         return;
     }
 
+    reportStaffLogin(bank, logged);
+
     Facilities* flogged = nullptr;
     Manager* mlogged = nullptr;
 
@@ -138,7 +149,6 @@ void staffMenu(Bank* bank) {
     else if(logged->getEmployeeType() == EmployeeType::MANAGER) {
         mlogged = (Manager*) logged;
     }
-
 
     bool isRunning = true;
     while(isRunning) {
@@ -159,6 +169,7 @@ void staffMenu(Bank* bank) {
                 cin >> time;
                 logged->takeHoursOff(time);
                 cout << "Done!" << endl;
+                reportLeave(bank, logged, time);
             }
             catch(exception& ex) {
                 cout << ex.what() << endl;
@@ -255,6 +266,8 @@ void staffMenu(Bank* bank) {
                         logged->createAccount(client, balance);
                     }
                 }
+
+                reportAccountCreation(bank, client);
             }
             catch (exception& ex) {
                 if(client != nullptr) delete client;
@@ -286,6 +299,8 @@ void staffMenu(Bank* bank) {
                 cin >> id;
 
                 flogged->disableAccounts(id);
+
+                reportBan(bank, bank->searchClient(id));
             }
             catch(exception& ex) {
                 cout << ex.what() << endl;
@@ -305,13 +320,16 @@ void staffMenu(Bank* bank) {
         else if(input == 'c' && flogged != nullptr) {
             clearConsole();
             try {
-                string res = flogged->acceptARequest();
-                if(res == "") cout << "No request has been accepted!" << endl;
+                string serial = flogged->acceptARequest();
+                if(serial == "") cout << "No request has been accepted!" << endl;
                 else {
                     cout << "    A request has been accepted" << endl;
                     cout << "-----------------------------------" << endl;
-                    cout << flogged->loanInfo(res) << endl;
+                    cout << flogged->loanInfo(serial) << endl;
                     cout << endl;
+
+                    const Loan* loan = bank->searchLoan(serial); 
+                    reportLoan(bank, bank->ownerOfTheAccount(loan->getLinkedAccountNumber()), loan->getValue());
                 }
             }
             catch(exception& ex) {
@@ -480,6 +498,8 @@ void clientMenu(Bank* bank) {
         return;
     }
 
+    reportClientLogin(bank, client);
+
     bool isRunning = true;
     while(isRunning) {
         clearConsole();
@@ -502,6 +522,7 @@ void clientMenu(Bank* bank) {
                 cin >> amount;
 
                 client->deposit(accountNumber, amount);
+                reportDeposite(bank, client, amount);
 
                 cout << "Done!" << endl;
             }
@@ -666,6 +687,58 @@ Client* makeClient(const string& Id) {
     }
 
     return nullptr;
+}
+
+void reportClientLogin(Bank* bank, const Person* person) {
+    stringstream str;
+    str << "Account with national code " << person->getId() << " login date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportStaffLogin(Bank* bank, const Person* person) {
+    stringstream str;
+    str << "Staff with national code " << person->getId() << " login date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportAccountCreation(Bank* bank, const Person* person) {
+    stringstream str;
+    str << "Account with national code " << person->getId() << " create in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportDeposite(Bank* bank, const Person* person, const int64_t& amount) {
+    stringstream str;
+    str << "Account with national code " << person->getId() << " increase account balance with amount " << amount << 
+    " in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportLoan(Bank* bank, const Person* person, const int64_t& value) {
+    stringstream str;
+    str << "Account with national code " << person->getId() << " get loan with value " << value << 
+    " in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportLeave(Bank* bank, const Person* person, const int& time) {
+    stringstream str;
+    str << "Staff with national code " << person->getId() << " get " << time << " days rest" << 
+    " in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
+}
+
+void reportBan(Bank* bank, const Person* person) {
+    stringstream str;
+    str << "Account with national code " << person->getId() << " banned in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+    str << endl;
+    bank->writeToReport(REPORT_FILE_NAME, str.str());
 }
 
 void clearConsole() {

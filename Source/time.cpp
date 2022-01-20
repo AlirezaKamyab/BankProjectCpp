@@ -55,3 +55,9 @@ Time::operator std::string() const {
     str << setw(2) << _s;
     return str.str();
 }
+
+// Non-member functions
+ostream& operator<<(ostream& out, const Time& time) {
+    out << (string) time;
+    return out;
+}

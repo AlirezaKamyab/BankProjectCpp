@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+const string REPORT_FILE_NAME = "Report.txt";
+
 class User;
 class Client;
 class Employee;
@@ -38,6 +40,8 @@ public:
     const Loan* searchLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;
+    const Loan* searchLoan(const string&) const;
+    const Client* ownerOfTheAccount(const string&) const;
     Account* searchAccount(const string&) const;
     Employee* logAsEmployee(const string&, const string&) const;
     Client* logAsClient(const string&, const string&) const;
@@ -56,6 +60,8 @@ public:
     void writeLoanToFile(const string&);
     void writeRequestToFile(const string&);
     void writeEmployeeToFile(const string&);
+
+    void writeToReport(const string&, const string&);
 
     Bank& operator=(const Bank& other);
     friend class Employee;

@@ -4,6 +4,7 @@
 #include "../Headers/facilities.h"
 #include "../Headers/manager.h"
 #include "../Headers/loan.h"
+#include "../Headers/helperClass.h"
 #include <fstream>
 #include <sstream>
 
@@ -103,15 +104,35 @@ User* Bank::searchUsername(const string& username) const {
     return nullptr;
 }
 
+const Loan* Bank::searchLoan(const string& serial) const {
+    for(Client* client : _clients) {
+        const Loan* loan = client->searchLoan(serial);
+        if(loan != nullptr) return loan;
+    }
+
+    return nullptr;
+}
+
 string Bank::withdrawLoan() {
     stringstream msg;
     for(Client* client : _clients) {
         for(Account* account : client->_accounts) {
             if(account->getLoan() == nullptr) continue;
             account->getLoan()->pay(this);
+
+            // writing a report
+            stringstream str;
+            str << "Account with national code " << client->getId() << " pay loan debt with value " << account->getLoan()->getEachPayment()
+            << " in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+            str << endl;
+            writeToReport(REPORT_FILE_NAME, str.str());
+            //------------------
+
             if(account->getLoan()->getRemainingPayments() == 0) {
                 delete account->getLoan();
                 account->setLoan(nullptr);
+                account->setValidationCount(0);
+                continue;
             }
 
             if(account->getLoan()->getOverduePayments() == 1) {
@@ -131,6 +152,13 @@ string Bank::withdrawLoan() {
                 else {
                     for(Account* a : client->_accounts) a->changeStatus(false);
                     msg << "All of the accounts of client with ID " << client->getId() << " is deactivated!" << endl;
+
+                    // writing a report
+                    stringstream str;
+                    str << "Account with national code " << client->getId() << " banned" << " in date " << Helper::getCurrentDate() << " time " << Helper::getCurrentTime() << endl;
+                    str << endl;
+                    writeToReport(REPORT_FILE_NAME, str.str());
+                    //------------------
                 }
             }
         }
@@ -142,6 +170,7 @@ string Bank::withdrawLoan() {
 const Client* Bank::searchClient(const string& id) const { return _searchClient(id); }
 const Employee* Bank::searchEmployee(const int& personnelId) const { return _searchEmployee(personnelId); }
 const Loan* Bank::searchLoans(const string& serialNumber) const { return _searchLoans(serialNumber); }
+const Client* Bank::ownerOfTheAccount(const string& accountNumber) const { return _ownerOfTheAccount(accountNumber); }
 const Manager* Bank::getManager() const { return _manager; }
 const Facilities* Bank::getFacility() const { return _facilities; }
 Employee* Bank::logAsEmployee(const string& username, const string& password) const {
@@ -456,6 +485,17 @@ string Bank::endOfTheDay() {
     }
 
     return str.str();
+}
+
+void Bank::writeToReport(const string& filename, const string& msg) {
+    ofstream file;
+    file.open(filename, ios::app);
+
+    if(!file.is_open()) throw BankException{"Cannot open the file!"};
+
+    file << msg << endl;
+
+    file.close();
 }
 
 Bank& Bank::operator=(const Bank& rhs) {

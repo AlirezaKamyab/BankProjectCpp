@@ -43,4 +43,6 @@ private:
     void reset();
 };
 
+ostream& operator<<(ostream&, const Time&);
+
 #endif // TIME_H

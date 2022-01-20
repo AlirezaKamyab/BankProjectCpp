@@ -89,8 +89,8 @@ void Loan::pay(Bank* bank) {
     if(acc == nullptr) throw LoanException{"Account does not exist in the specified bank!"};
     if(acc->getBalance() >= getEachPayment()) {
         acc->setBalance(acc->getBalance() - getEachPayment());
-        if(_remaining_payments > 0) _remaining_payments--;
-        else _overdue_payments--;
+        if(_overdue_payments > 0) _overdue_payments--;
+        else _remaining_payments--;
     }
     else {
         _overdue_payments++;
