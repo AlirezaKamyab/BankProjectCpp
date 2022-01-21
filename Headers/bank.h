@@ -37,6 +37,7 @@ public:
 
     const Client* searchClient(const string&) const;
     const Employee* searchEmployee(const int&) const;
+    const Employee* searchEmployee(const string&) const;
     const Loan* searchLoans(const string&) const;
     const Manager* getManager() const;
     const Facilities* getFacility() const;

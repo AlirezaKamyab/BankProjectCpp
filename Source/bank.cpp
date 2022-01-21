@@ -130,15 +130,16 @@ string Bank::withdrawLoan() {
 
             if(account->getLoan()->getRemainingPayments() == 0) {
                 delete account->getLoan();
-                account->setLoan(nullptr);
                 account->setValidationCount(0);
+                account->setLoan(nullptr);
+                for(Account* a : client->_accounts) a->changeStatus(true);
                 continue;
             }
 
             if(account->getLoan()->getOverduePayments() == 1) {
-                msg << "Insufficient balance for account number " << account->getAccountNumber() << endl;
+                msg << "Overdue payment for account number >> " << account->getAccountNumber() << endl;
             }
-            else if(account->getLoan()->getOverduePayments() >= 2) {
+            if(account->getLoan()->getOverduePayments() >= 2 || account->getStatus() == false) {
                 bool flag = true;
                 for(Account* acc : client->_accounts) {
                     if(acc->getBalance() < acc->getLoan()->getOverduePayments() * acc->getLoan()->getEachPayment()) {
@@ -176,6 +177,14 @@ const Facilities* Bank::getFacility() const { return _facilities; }
 Employee* Bank::logAsEmployee(const string& username, const string& password) const {
     for(Employee* employee : _employees) {
         if(employee->login(User{username, password})) return employee;
+    }
+
+    return nullptr;
+}
+
+const Employee* Bank::searchEmployee(const string& id) const {
+    for(Employee* emp : _employees) {
+        if(emp->getId() == id) return emp;
     }
 
     return nullptr;

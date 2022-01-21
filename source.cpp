@@ -246,6 +246,13 @@ void staffMenu(Bank* bank) {
 
                 client = logged->searchClient(id);
 
+                if(client == nullptr) {
+                    const Employee* searchedEmployee = bank->searchEmployee(id);
+                    if(searchedEmployee != nullptr) {
+                        throw EmployeeException{"Duplicate Id spotted!"};
+                    }
+                }
+
                 int64_t balance = 0;
 
                 while(true) {
