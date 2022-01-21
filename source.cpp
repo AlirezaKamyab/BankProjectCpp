@@ -246,13 +246,6 @@ void staffMenu(Bank* bank) {
 
                 client = logged->searchClient(id);
 
-                if(client == nullptr) {
-                    const Employee* searchedEmployee = bank->searchEmployee(id);
-                    if(searchedEmployee != nullptr) {
-                        throw EmployeeException{"Duplicate Id spotted!"};
-                    }
-                }
-
                 int64_t balance = 0;
 
                 while(true) {
@@ -270,11 +263,11 @@ void staffMenu(Bank* bank) {
                     if(client != nullptr) logged->createAccount(client, balance);
                     else {
                         client = makeClient(id);
-                        logged->createAccount(client, balance);
+                        if(client != nullptr) logged->createAccount(client, balance);
                     }
                 }
 
-                reportAccountCreation(bank, client);
+                if(client != nullptr) reportAccountCreation(bank, client);
             }
             catch (exception& ex) {
                 if(client != nullptr) delete client;
