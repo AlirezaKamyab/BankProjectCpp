@@ -483,7 +483,7 @@ void Bank::writeEmployeeToFile(const string& filename) {
 
 string Bank::endOfTheDay() {
     stringstream str;
-    str << withdrawLoan() << endl;
+    str << withdrawLoan();
 
     for(Client* client : _clients) {
         for(Account* account : client->_accounts) {

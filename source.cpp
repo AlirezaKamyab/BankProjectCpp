@@ -45,7 +45,7 @@ int main() {
     catch(exception& ex) {}
 
     mainMenu(aimlessly);
-    aimlessly->endOfTheDay();
+    cout << aimlessly->endOfTheDay();
 
     aimlessly->writeClientToFile("clients.txt");
     aimlessly->writeAccountToFile("accounts.txt");
