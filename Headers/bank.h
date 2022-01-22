@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "date.h"
 using namespace std;
 
 const string REPORT_FILE_NAME = "Report.txt";
@@ -43,6 +44,8 @@ public:
     const Facilities* getFacility() const;
     const Loan* searchLoan(const string&) const;
     const Client* ownerOfTheAccount(const string&) const;
+    Date getStartDate() const;
+    Date getEndDate() const;
     Account* searchAccount(const string&) const;
     Employee* logAsEmployee(const string&, const string&) const;
     Client* logAsClient(const string&, const string&) const;
@@ -55,14 +58,16 @@ public:
     void readLoanFromFile(const string&);
     void readRequestFromFile(const string&);
     void readEmployeeFromFile(const string&);
+    void readDateFromFile(const string&);
     
-    void writeClientToFile(const string&);
-    void writeAccountToFile(const string&);
-    void writeLoanToFile(const string&);
-    void writeRequestToFile(const string&);
-    void writeEmployeeToFile(const string&);
+    void writeClientToFile(const string&) const;
+    void writeAccountToFile(const string&) const;
+    void writeLoanToFile(const string&) const;
+    void writeRequestToFile(const string&) const;
+    void writeEmployeeToFile(const string&) const;
+    void writeDateToFile(const string&) const;
 
-    void writeToReport(const string&, const string&);
+    void writeToReport(const string&, const string&) const;
 
     Bank& operator=(const Bank& other);
     friend class Employee;
@@ -74,6 +79,8 @@ private:
     vector<Employee*> _employees;
     Manager* _manager;
     Facilities* _facilities;
+    Date _start;
+    Date _end;
     
     Bank();
     void reset();

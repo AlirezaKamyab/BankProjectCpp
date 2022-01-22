@@ -13,14 +13,20 @@ Bank::Bank(Manager* manager) : Bank{manager, nullptr} {}
 Bank::Bank(Manager* manager, Facilities* facilities) : _manager{manager}, _facilities{facilities} {
     _employees.push_back(manager);
     if(facilities != nullptr) _employees.push_back(facilities);
+    _start = Helper::getCurrentDate();
+    _end = Helper::getCurrentDate();
 }
 Bank::Bank(const Bank& other) : Bank{other._manager, other._facilities} {
     for(Employee* emp : other._employees) _employees.push_back(emp); 
     for(Client* cli : other._clients) _clients.push_back(cli);
+    _start = other._start;
+    _end = other._end;
 }
 Bank::Bank(Bank&& other) noexcept : Bank{other._manager, other._facilities} {
     _clients = std::move(other._clients);
     _employees = std::move(other._employees);
+    _start = std::move(other._start);
+    _end = std::move(other._end);
     other.reset();
 }
 Bank::~Bank() {
@@ -35,6 +41,8 @@ void Bank::reset() {
     _facilities = nullptr;
     _clients.clear();
     _employees.clear();
+    _start = Date{1,1,1};
+    _end = Date{1,1,1};
 }
 
 void Bank::addEmployee(Employee* employee) {
@@ -172,6 +180,8 @@ const Client* Bank::searchClient(const string& id) const { return _searchClient(
 const Employee* Bank::searchEmployee(const int& personnelId) const { return _searchEmployee(personnelId); }
 const Loan* Bank::searchLoans(const string& serialNumber) const { return _searchLoans(serialNumber); }
 const Client* Bank::ownerOfTheAccount(const string& accountNumber) const { return _ownerOfTheAccount(accountNumber); }
+Date Bank::getStartDate() const { return _start; }
+Date Bank::getEndDate() const { return _end; }
 const Manager* Bank::getManager() const { return _manager; }
 const Facilities* Bank::getFacility() const { return _facilities; }
 Employee* Bank::logAsEmployee(const string& username, const string& password) const {
@@ -383,7 +393,19 @@ void Bank::readEmployeeFromFile(const string& filename) {
     file.close();
 }
 
-void Bank::writeClientToFile(const string& filename) {
+void Bank::readDateFromFile(const string& filename) {
+    ifstream file;
+    file.open(filename, ios::binary);
+
+    if(!file.is_open()) throw BankException{"Could not open the file!"};
+
+    file.read((char*) &_start, sizeof(Date));
+    file.read((char*) &_end, sizeof(Date));
+
+    file.close();
+}
+
+void Bank::writeClientToFile(const string& filename) const {
     ofstream file;
     file.open(filename);
 
@@ -401,7 +423,7 @@ void Bank::writeClientToFile(const string& filename) {
     file.close();
 }
 
-void Bank::writeAccountToFile(const string& filename) {
+void Bank::writeAccountToFile(const string& filename) const {
     ofstream file;
     file.open(filename);
 
@@ -420,7 +442,7 @@ void Bank::writeAccountToFile(const string& filename) {
 
     file.close();
 }
-void Bank::writeLoanToFile(const string& filename) {
+void Bank::writeLoanToFile(const string& filename) const {
     ofstream file;
     file.open(filename);
 
@@ -442,7 +464,7 @@ void Bank::writeLoanToFile(const string& filename) {
 
     file.close();
 }
-void Bank::writeRequestToFile(const string& filename) {
+void Bank::writeRequestToFile(const string& filename) const {
     ofstream file;
     file.open(filename);
 
@@ -456,7 +478,7 @@ void Bank::writeRequestToFile(const string& filename) {
 
     file.close();
 }
-void Bank::writeEmployeeToFile(const string& filename) {
+void Bank::writeEmployeeToFile(const string& filename) const {
     ofstream file;
     file.open(filename);
 
@@ -481,6 +503,18 @@ void Bank::writeEmployeeToFile(const string& filename) {
     file.close();
 }
 
+void Bank::writeDateToFile(const string& filename) const {
+    ofstream file;
+    file.open(filename, ios::binary);
+
+    if(!file.is_open()) throw BankException{"Could not open the file!"};
+
+    file.write((char*) &_start, sizeof(Date));
+    file.write((char*) &_end, sizeof(Date));
+
+    file.close();
+}
+
 string Bank::endOfTheDay() {
     stringstream str;
     str << withdrawLoan();
@@ -493,10 +527,22 @@ string Bank::endOfTheDay() {
         }
     }
 
+    if(_end.get_day() == Date::max_day_for_month(_end.get_month(), _end.get_year())) {
+        _end.inc_one_day();
+
+        for(Employee* emp : _employees) {
+            emp->setVacationHours(0);
+            emp->setExtraHours(0);
+            emp->setPenalty(0);
+            emp->setReward(0);
+        }
+    }
+    else _end.inc_one_day();
+
     return str.str();
 }
 
-void Bank::writeToReport(const string& filename, const string& msg) {
+void Bank::writeToReport(const string& filename, const string& msg) const {
     ofstream file;
     file.open(filename, ios::app);
 

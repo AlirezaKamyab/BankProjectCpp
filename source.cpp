@@ -36,6 +36,7 @@ int main() {
     manager->setBank(aimlessly);
 
     try {
+        aimlessly->readDateFromFile("date.information");
         aimlessly->readClientFromFile("clients.txt");
         aimlessly->readAccountFromFile("accounts.txt");
         aimlessly->readLoanFromFile("loans.txt");
@@ -47,6 +48,7 @@ int main() {
     mainMenu(aimlessly);
     cout << aimlessly->endOfTheDay();
 
+    aimlessly->writeDateToFile("date.information");
     aimlessly->writeClientToFile("clients.txt");
     aimlessly->writeAccountToFile("accounts.txt");
     aimlessly->writeLoanToFile("loans.txt");
@@ -96,6 +98,7 @@ void mainMenu(Bank* bank) {
     bool isRunning = true;
     while(isRunning) {
         clearConsole();
+        // cout << Date::max_day_for_month(bank->getEndDate().get_month(), bank->getEndDate().get_year()) - bank->getEndDate().get_day() << endl;
         printMainMenu();
         char input;
         cin >> input;
