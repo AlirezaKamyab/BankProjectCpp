@@ -120,7 +120,17 @@ void Employee::disableAccount(const string& accountNumber) const {
 
 void Employee::createAccount(Client* client, const int64_t& startingBalance) const {
     if(_bank->searchEmployee(client->getId()) != nullptr) throw EmployeeException{"There is an employee with the same id!"};
-    if(_bank->searchUsername(client->getUsername()) != nullptr) throw EmployeeException{"Username already exists!"};
+
+    Client* su = nullptr;
+    for(Client* c : _bank->_clients) {
+        if(c->getUsername() == client->getUsername()) {
+            su = c;
+            break;
+        }
+    } 
+    const Client* sc = _bank->searchClient(client->getId()); 
+    if(su != nullptr && sc != nullptr && sc->getUsername() == su->getUsername() && sc->getId() != su->getId()) throw EmployeeException{"Username already exists!"};
+
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
     Account* account = new Account{Helper::generateRandom(10), client->getId(), Helper::getCurrentDate(), startingBalance, 0, true, _bank};
     while(_bank->searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
