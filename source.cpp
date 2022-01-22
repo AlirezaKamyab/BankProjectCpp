@@ -35,15 +35,12 @@ int main() {
     Bank* aimlessly = new Bank{manager};
     manager->setBank(aimlessly);
 
-    try {
-        aimlessly->readDateFromFile("date.information");
-        aimlessly->readClientFromFile("clients.txt");
-        aimlessly->readAccountFromFile("accounts.txt");
-        aimlessly->readLoanFromFile("loans.txt");
-        aimlessly->readRequestFromFile("requests.txt");
-        aimlessly->readEmployeeFromFile("employees.txt");
-    }
-    catch(exception& ex) {}
+    try { aimlessly->readDateFromFile("date.information"); } catch(exception& ex) {}
+    try { aimlessly->readClientFromFile("clients.txt"); } catch(exception& ex) {}
+    try { aimlessly->readAccountFromFile("accounts.txt"); } catch(exception& ex) {}
+    try { aimlessly->readLoanFromFile("loans.txt"); } catch(exception& ex) {}
+    try { aimlessly->readRequestFromFile("requests.txt"); } catch(exception& ex) {}
+    try { aimlessly->readEmployeeFromFile("employees.txt"); } catch(exception& ex) {}
 
     mainMenu(aimlessly);
     cout << aimlessly->endOfTheDay();
