@@ -373,7 +373,13 @@ void Bank::readEmployeeFromFile(const string& filename) {
         empType = (EmployeeType) numberType;
 
         if(_facilities != nullptr && empType == EmployeeType::FACILITIES) continue;
-        if(empType == EmployeeType::MANAGER) continue;
+        if(empType == EmployeeType::MANAGER) {
+            _manager->setPenalty(penalty);
+            _manager->setExtraHours(extraHours);
+            _manager->setReward(reward);
+            _manager->setVacationHours(leaveHours);
+            continue;
+        }
 
         Employee* emp = new Employee{name, lastname, id, personnelId, birthday, username, password, baseIncome, leaveHours, extraHours, this};
         emp->setEmployeeType(empType);
