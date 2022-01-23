@@ -85,6 +85,7 @@ string Facilities::acceptARequest() {
     temp->setBalance(temp->getBalance() + newAmount);
     requests.erase(requests.begin() + 0);
     temp->setLoan(loan);
+    _acceptedOneRequest = true;
     return serial;
 }
 
