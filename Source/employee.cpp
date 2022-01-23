@@ -134,6 +134,17 @@ void Employee::createAccount(Client* client, const int64_t& startingBalance) con
     if(searchClient(client->getId()) == nullptr) _bank->addClient(client);
     Account* account = new Account{Helper::generateRandom(10), client->getId(), Helper::getCurrentDate(), startingBalance, 0, true, _bank};
     while(_bank->searchAccount(account->getAccountNumber()) != nullptr) account->setAccountNumber(Helper::generateRandom(10));
+    
+    bool flag = false;
+    for(Account* acc : client->_accounts) {
+         if(acc->getBalance() < acc->getLoan()->getOverduePayments() * acc->getLoan()->getEachPayment() && acc->getLoan()->getOverduePayments() >= 2) {
+             flag = true;
+             break;
+         }
+    }
+
+    if(flag) account->changeStatus(false);
+    
     client->createAccount(*account);
 }
 
