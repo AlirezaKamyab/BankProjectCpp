@@ -137,6 +137,7 @@ void Employee::createAccount(Client* client, const int64_t& startingBalance) con
     
     bool flag = false;
     for(Account* acc : client->_accounts) {
+        if(acc->getLoan() == nullptr) continue;
          if(acc->getBalance() < acc->getLoan()->getOverduePayments() * acc->getLoan()->getEachPayment() && acc->getLoan()->getOverduePayments() >= 2) {
              flag = true;
              break;

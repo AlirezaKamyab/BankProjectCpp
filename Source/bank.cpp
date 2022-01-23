@@ -153,6 +153,7 @@ string Bank::withdrawLoan() {
             if(account->getLoan()->getOverduePayments() >= 2 || account->getStatus() == false) {
                 bool flag = true;
                 for(Account* acc : client->_accounts) {
+                    if(acc->getLoan() == nullptr) continue;
                     if(acc->getBalance() < acc->getLoan()->getOverduePayments() * acc->getLoan()->getEachPayment()) {
                         flag = false;
                         break;
