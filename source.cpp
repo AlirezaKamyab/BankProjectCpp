@@ -605,6 +605,7 @@ void clientMenu(Bank* bank) {
                 bool infoRunning = true;
                 while(infoRunning) {
                     clearConsole();
+                    cout << (string) *client << endl << endl;
                     cout << "    Personal Information" << endl;
                     cout << "------------------------------" << endl;
                     cout << "1- Account info" << endl;
@@ -618,6 +619,9 @@ void clientMenu(Bank* bank) {
                         try {
                             clearConsole();
                             cout << (string) *client << endl;
+                            cout << "         Accounts" << endl;
+                            cout << "---------------------------" << endl;
+                            cout << client->showAccounts() << endl;
                         }
                         catch(exception& ex) {
                             cout << ex.what() << endl;
@@ -627,6 +631,7 @@ void clientMenu(Bank* bank) {
                     else if(input == '2') {
                         try {
                             clearConsole();
+                            cout << (string) *client << endl;
                             cout << "            Loans" << endl;
                             cout << "---------------------------------" << endl;
                             cout << client->showLoans() << endl;
