@@ -5,6 +5,18 @@
 #include <string>
 using namespace std;
 
+class DateException : public exception {
+public:
+    DateException() : message{""} {}
+    explicit DateException(const string& msg) : message{msg} {}
+    explicit DateException(const char* msg) : message{msg} {}
+    virtual ~DateException() {}
+
+    virtual const char* what(void) const noexcept { return message.c_str(); }
+private:
+    string message;
+};
+
 class Date {
 public:
     Date();

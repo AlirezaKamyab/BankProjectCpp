@@ -121,16 +121,27 @@ int Date::days_between(const Date& d1, const Date& d2) {
 }
 
 Date Date::str_to_date(string s) {
-    for(char& c : s) {
-        if(c == '/') c = ' ';
-    }
-
     int d, m, y;
-    stringstream stream{s};
-    
-    stream >> y;
-    stream >> m;
-    stream >> d;
+    try {
+        int cnt = 0;
+        for(char& c : s) {
+            if(c == '/') {
+                c = ' ';
+                cnt++;
+            }
+        }
+
+        if(cnt != 2) throw DateException{"Invalid Date!"};
+
+        stringstream stream{s};
+        
+        stream >> y;
+        stream >> m;
+        stream >> d;
+    }
+    catch(...) {
+        throw DateException{"Invalid Date!"};
+    }
 
     return Date(d, m, y);
 }
