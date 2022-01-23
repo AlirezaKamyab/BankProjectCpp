@@ -42,6 +42,10 @@ string Facilities::acceptARequest() {
     if(_acceptedOneRequest) throw FacilitiesException{"One request has been accepted for today"};
     if(requests.size() == 0) return "";
     Account* temp = requests[0].getAccount();
+    if(temp == nullptr) {
+        requests.erase(requests.begin() + 0);
+        return acceptARequest();
+    }
     if(temp->getLoan() != nullptr) {
         requests.erase(requests.begin() + 0);
         return acceptARequest();
