@@ -60,9 +60,9 @@ LoanType Loan::getLoanType(void) const { return _loanType; }
 int Loan::getRemainingPayments(void) const { return _remaining_payments; }
 int Loan::getPaidPayments(void) const { 
     switch(_loanType) {
-        case LoanType::MONTH_12: return (12 - _remaining_payments); 
-        case LoanType::MONTH_24: return (24 - _remaining_payments); 
-        case LoanType::MONTH_36: return (36 - _remaining_payments); 
+        case LoanType::MONTH_12: return (12 - _remaining_payments - _overdue_payments); 
+        case LoanType::MONTH_24: return (24 - _remaining_payments - _overdue_payments); 
+        case LoanType::MONTH_36: return (36 - _remaining_payments - _overdue_payments); 
     }
     return 0;
 }
@@ -87,10 +87,15 @@ void Loan::pay(Bank* bank) {
     if(_remaining_payments == 0 && _overdue_payments == 0) return;
     Account* acc = bank->searchAccount(_linkedAccountNumber);
     if(acc == nullptr) throw LoanException{"Account does not exist in the specified bank!"};
+
+    while(acc->getBalance() >= getEachPayment() && _overdue_payments > 0) {
+        acc->setBalance(acc->getBalance() - getEachPayment());
+        _overdue_payments--;
+    }
+
     if(acc->getBalance() >= getEachPayment()) {
         acc->setBalance(acc->getBalance() - getEachPayment());
-        if(_overdue_payments > 0) _overdue_payments--;
-        else _remaining_payments--;
+        _remaining_payments--;
     }
     else {
         if(_remaining_payments != 0) {
@@ -131,8 +136,8 @@ Loan::operator std::string() const {
             break;
     }
     
-    str << "Status: number of " << getPaidPayments() << " were paid successfully and " << _remaining_payments << " is remaining "
-        << " and number of " << _overdue_payments << " is overdone!" << endl;
+    str << "Status: number of " << getPaidPayments() << " were paid successfully and " << _remaining_payments << " is remaining"
+        << " and number of " << _overdue_payments << " is overdued!" << endl;
 
     return str.str();
 }
