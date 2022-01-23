@@ -93,8 +93,10 @@ void Loan::pay(Bank* bank) {
         else _remaining_payments--;
     }
     else {
-        _overdue_payments++;
-        _remaining_payments--;
+        if(_remaining_payments != 0) {
+            _overdue_payments++;
+            _remaining_payments--;
+        }
     }
 }
 
