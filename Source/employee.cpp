@@ -146,6 +146,7 @@ void Employee::deleteAccount(const string& accountNumber) const {
     if(owner == nullptr) throw EmployeeException{"Cound't find the specified account in the bank!"};
     for(int i = 0; i < owner->_accounts.size(); i++) {
         if(owner->_accounts[i]->getAccountNumber() == accountNumber) {
+            if(owner->_accounts[i]->getLoan() != nullptr) throw BankException{"A loan found bound to this account!"};
             delete owner->_accounts[i];
             owner->_accounts.erase(owner->_accounts.begin() + i);
             break;
