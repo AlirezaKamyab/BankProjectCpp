@@ -80,6 +80,12 @@ string Client::showLoans() const {
     return str.str();
 }
 
+string Client::showAccounts() const {
+    stringstream str;
+    for(Account* account : _accounts) str << account->operator std::string() << endl;
+    return str.str();
+}
+
 Loan* Client::searchLoan(const string& serial) const {
     for(Account* account : _accounts) {
         if(account->getLoan() == nullptr) continue;
@@ -101,10 +107,5 @@ Client::operator std::string() const {
     stringstream str;
     str << Person::operator std::string() << endl;
     str << User::operator std::string() << endl;
-
-    str << "         Accounts" << endl;
-    str << "---------------------------" << endl;
-    for(Account* account : _accounts) str << account->operator std::string() << endl;
-
     return str.str();
 }

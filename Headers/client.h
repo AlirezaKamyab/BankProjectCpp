@@ -38,6 +38,7 @@ public:
     void requestLoan(const string&, const LoanType&);
     Loan* searchLoan(const string&) const;
     string showLoans() const;
+    string showAccounts() const;
 
     Client& operator=(const Client&);
     operator string() const;
