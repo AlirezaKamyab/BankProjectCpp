@@ -9,20 +9,21 @@
 #include <sstream>
 
 Bank::Bank() : _manager{nullptr}, _facilities{nullptr} {}
-Bank::Bank(Manager* manager) : Bank{manager, nullptr} {}
-Bank::Bank(Manager* manager, Facilities* facilities) : _manager{manager}, _facilities{facilities} {
+Bank::Bank(Manager* manager, const string& name, const int& branch) : Bank{manager, nullptr, name, branch} {}
+Bank::Bank(Manager* manager, Facilities* facilities, const string& name, const int& branch) : _manager{manager},
+        _facilities{facilities}, _name{name}, _branch{branch} {
     _employees.push_back(manager);
     if(facilities != nullptr) _employees.push_back(facilities);
     _start = Helper::getCurrentDate();
     _end = Helper::getCurrentDate();
 }
-Bank::Bank(const Bank& other) : Bank{other._manager, other._facilities} {
+Bank::Bank(const Bank& other) : Bank{other._manager, other._facilities, other._name, other._branch} {
     for(Employee* emp : other._employees) _employees.push_back(emp); 
     for(Client* cli : other._clients) _clients.push_back(cli);
     _start = other._start;
     _end = other._end;
 }
-Bank::Bank(Bank&& other) noexcept : Bank{other._manager, other._facilities} {
+Bank::Bank(Bank&& other) noexcept : Bank{other._manager, other._facilities, other._name, other._branch} {
     _clients = std::move(other._clients);
     _employees = std::move(other._employees);
     _start = std::move(other._start);
@@ -43,6 +44,8 @@ void Bank::reset() {
     _employees.clear();
     _start = Date{1,1,1};
     _end = Date{1,1,1};
+    _name = "";
+    _branch = 0;
 }
 
 void Bank::addEmployee(Employee* employee) {

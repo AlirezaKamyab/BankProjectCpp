@@ -32,7 +32,7 @@ void awaitKey();
 int main() {
     Manager* manager = new Manager{"Alireza", "Kamyab", "1850484211", Employee::generatePersonnelId(), Date{27,4,1381}, "aimlessly", "123456789"};
     manager->setBaseIncome(20000000);
-    Bank* aimlessly = new Bank{manager};
+    Bank* aimlessly = new Bank{manager, "Central Bank Of America", 165};
     manager->setBank(aimlessly);
 
     try { aimlessly->readDateFromFile("date.information"); } catch(exception& ex) {}
@@ -566,9 +566,9 @@ void clientMenu(Bank* bank) {
                 LoanType loanType;
                 cout << "        Loan Type" << endl;
                 cout << "--------------------------" << endl;
-                cout << "1- 12 Month with 4% benefit" << endl;
-                cout << "2- 24 Month with 8% benefit" << endl;
-                cout << "3- 36 Month with 12% benefit" << endl;
+                cout << "1- 12 Month with 4% interest" << endl;
+                cout << "2- 24 Month with 8% interest" << endl;
+                cout << "3- 36 Month with 12% interest" << endl;
 
                 while(true) {
                     cout << ">> ";
@@ -577,17 +577,17 @@ void clientMenu(Bank* bank) {
 
                     if(input == '1') {
                         loanType = LoanType::MONTH_12;
-                        cout << "12 Month with 4% benefit selected" << endl;
+                        cout << "12 Month with 4% interest selected" << endl;
                         break;
                     }
                     else if(input == '2') {
                         loanType = LoanType::MONTH_24;
-                        cout << "24 Month with 8% benefit selected" << endl;
+                        cout << "24 Month with 8% interest selected" << endl;
                         break;
                     }
                     else if(input == '3') {
                         loanType = LoanType::MONTH_36;
-                        cout << "36 Month with 12% benefit selected" << endl;
+                        cout << "36 Month with 12% interest selected" << endl;
                         break;
                     }
                 }

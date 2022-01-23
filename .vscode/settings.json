@@ -8,6 +8,9 @@
         "iosfwd": "cpp",
         "iostream": "cpp",
         "new": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp"
     }
 }

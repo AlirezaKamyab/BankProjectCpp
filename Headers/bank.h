@@ -30,8 +30,8 @@ private:
 
 class Bank{
 public:
-    Bank(Manager*);
-    Bank(Manager*, Facilities*);
+    Bank(Manager*, const string&, const int&);
+    Bank(Manager*, Facilities*, const string&, const int&);
     Bank(const Bank&);
     Bank(Bank&&) noexcept;
     ~Bank();
@@ -75,6 +75,8 @@ public:
     friend class Manager;
     friend class Account;
 private:
+    string _name;
+    int _branch;
     vector<Client*> _clients;
     vector<Employee*> _employees;
     Manager* _manager;
