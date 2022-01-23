@@ -61,6 +61,7 @@ void Client::withdraw(const string& accountNumber, const int64_t& amount) const 
 void Client::requestLoan(const string& accountNumber, const LoanType& type) {
     Account* temp = getAccount(accountNumber);
     if(temp == nullptr) throw AccountException{"Account with the specified account number does not exists!"};
+    if(temp->getLoan() != nullptr) throw AccountException{"You already have a loan!"};
     if(temp->getBalance() < 1e6) throw AccountException{"Account balance should be at least 1,000,000"};
     if(temp->getStatus() == false) throw AccountException{"Account is de-activated!"};
 
