@@ -31,7 +31,7 @@ void awaitKey();
 
 int main() {
     Manager* manager = new Manager{"Alireza", "Kamyab", "1850484211", Employee::generatePersonnelId(), Date{27,4,1381}, "aimlessly", "123456789"};
-    manager->setBaseIncome(1000000000);
+    manager->setBaseIncome(20000000);
     Bank* aimlessly = new Bank{manager};
     manager->setBank(aimlessly);
 
@@ -168,7 +168,8 @@ void staffMenu(Bank* bank) {
                 cout << "Input duration >> ";
                 cin >> time;
                 logged->takeHoursOff(time);
-                cout << "Done!" << endl;
+                cout << "Remaining hours " << max(0, 15 - logged->getVacationHours()) << endl;
+                cout << "Penalty is now " << logged->getPenalty() << " new income is " << logged->getIncome() << endl;
                 reportLeave(bank, logged, time);
             }
             catch(exception& ex) {
@@ -184,7 +185,7 @@ void staffMenu(Bank* bank) {
                 cout << "Input duration >> ";
                 cin >> time;
                 logged->requestExtraHours(time);
-                cout << "Done!" << endl;
+                cout << "Reward is " << logged->getReward() << " new income is " << logged->getIncome() << endl;
             }
             catch(exception& ex) {
                 cout << ex.what() << endl;
