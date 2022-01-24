@@ -150,7 +150,7 @@ void Employee::createAccount(Client* client, const int64_t& startingBalance) con
 }
 
 int Employee::generatePersonnelId() {
-    return lastGeneratedPersonnelId++;
+    return ++lastGeneratedPersonnelId;
 }
 
 void Employee::deleteAccount(const string& accountNumber) const {

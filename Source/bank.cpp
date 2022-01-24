@@ -395,7 +395,7 @@ void Bank::readEmployeeFromFile(const string& filename) {
             _facilities = ftemp;
         }
 
-        if(personnelId >= Employee::getLastgGeneratedPersonnelId()) Employee::setLastGeneratedPersonnelId(personnelId + 1);
+        if(personnelId >= Employee::getLastgGeneratedPersonnelId()) Employee::setLastGeneratedPersonnelId(personnelId);
 
         _employees.push_back(emp);
     }
