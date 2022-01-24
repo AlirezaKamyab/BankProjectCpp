@@ -214,19 +214,8 @@ void staffMenu(Bank* bank) {
                     if(id == "Q") {
                         break;
                     }
-                    Client* searched = logged->searchClient(id);
-                    if(searched == nullptr) {
-                        cout << "No client with specified id found!" << endl;
-                        awaitKey();
-                        continue;
-                    }
-                    cout << (string) *searched << endl;
-                    cout << endl;
-                    cout << "         Loans" << endl;
-                    cout << "------------------------" << endl;
-                    cout << searched->showLoans() << endl;
-                    cout << endl;
-
+                    
+                    cout << logged->showClientInfo(id) << endl;
                     awaitKey();
                 }
                 catch(exception& ex) {
