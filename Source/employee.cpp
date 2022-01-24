@@ -183,7 +183,12 @@ void Employee::deleteAccount(const string& accountNumber) const {
 string Employee::showClientInfo(const string& id) const {
     Client* client = searchClient(id);
     if(client == nullptr) return "Not found!";
-    return (string) *client;
+    stringstream str;
+    str << (string) *client << endl;
+    str << "         Accounts" << endl;
+    str << "------------------------------" << endl;
+    str << client->showAccounts() << endl;
+    return str.str();
 }
 
 Employee& Employee::operator=(const Employee& rhs) {
